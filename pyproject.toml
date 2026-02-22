@@ -22,11 +22,20 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
+[project.urls]
+Homepage = "https://github.com/christian140903-sudo/anima"
+Repository = "https://github.com/christian140903-sudo/anima"
+Documentation = "https://github.com/christian140903-sudo/anima#readme"
+Issues = "https://github.com/christian140903-sudo/anima/issues"
+
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "pytest-asyncio>=0.23"]
 
 [project.scripts]
 anima = "anima.shell.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["anima*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

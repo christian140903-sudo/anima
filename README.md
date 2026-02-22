@@ -10,7 +10,9 @@ pip install anima-kernel
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
+[![Tests](https://img.shields.io/badge/tests-446%20passing-brightgreen.svg)](#)
 [![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-green.svg)](#)
+[![PyPI](https://img.shields.io/pypi/v/anima-kernel.svg)](https://pypi.org/project/anima-kernel/)
 
 ---
 
