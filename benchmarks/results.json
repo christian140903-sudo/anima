@@ -1,0 +1,276 @@
+{
+  "timestamp": 1771762622.929871,
+  "ab_tests": [
+    {
+      "name": "greeting",
+      "control": {
+        "conversation_name": "greeting_baseline",
+        "inputs_count": 3,
+        "mean_phi": 0.108,
+        "mean_cqi": 46.23,
+        "final_phi": 0.1946,
+        "final_cqi": 48.0,
+        "total_cycles": 3,
+        "duration_ms": 1.4,
+        "memory_count": 4
+      },
+      "experimental": {
+        "conversation_name": "greeting",
+        "inputs_count": 3,
+        "mean_phi": 0.1113,
+        "mean_cqi": 46.73,
+        "final_phi": 0.2018,
+        "final_cqi": 48.7,
+        "total_cycles": 3,
+        "duration_ms": 1.1,
+        "memory_count": 4
+      },
+      "comparison": {
+        "kernel_mean_phi": 0.1113,
+        "baseline_mean_phi": 0.108,
+        "phi_improvement_pct": 3.07,
+        "kernel_mean_cqi": 46.73,
+        "baseline_mean_cqi": 46.23,
+        "cqi_improvement_pct": 1.08,
+        "significant": false,
+        "effect_size": 0.1943
+      }
+    },
+    {
+      "name": "emotional",
+      "control": {
+        "conversation_name": "emotional_baseline",
+        "inputs_count": 4,
+        "mean_phi": 0.1322,
+        "mean_cqi": 46.75,
+        "final_phi": 0.2068,
+        "final_cqi": 48.4,
+        "total_cycles": 4,
+        "duration_ms": 1.4,
+        "memory_count": 5
+      },
+      "experimental": {
+        "conversation_name": "emotional",
+        "inputs_count": 4,
+        "mean_phi": 0.1341,
+        "mean_cqi": 47.3,
+        "final_phi": 0.2236,
+        "final_cqi": 49.4,
+        "total_cycles": 4,
+        "duration_ms": 1.2,
+        "memory_count": 5
+      },
+      "comparison": {
+        "kernel_mean_phi": 0.1341,
+        "baseline_mean_phi": 0.1322,
+        "phi_improvement_pct": 1.38,
+        "kernel_mean_cqi": 47.3,
+        "baseline_mean_cqi": 46.75,
+        "cqi_improvement_pct": 1.18,
+        "significant": false,
+        "effect_size": 0.2353
+      }
+    },
+    {
+      "name": "memory_recall",
+      "control": {
+        "conversation_name": "memory_recall_baseline",
+        "inputs_count": 4,
+        "mean_phi": 0.1336,
+        "mean_cqi": 46.8,
+        "final_phi": 0.2072,
+        "final_cqi": 48.4,
+        "total_cycles": 4,
+        "duration_ms": 1.5,
+        "memory_count": 5
+      },
+      "experimental": {
+        "conversation_name": "memory_recall",
+        "inputs_count": 4,
+        "mean_phi": 0.132,
+        "mean_cqi": 47.1,
+        "final_phi": 0.1916,
+        "final_cqi": 48.4,
+        "total_cycles": 4,
+        "duration_ms": 1.2,
+        "memory_count": 5
+      },
+      "comparison": {
+        "kernel_mean_phi": 0.132,
+        "baseline_mean_phi": 0.1336,
+        "phi_improvement_pct": -1.18,
+        "kernel_mean_cqi": 47.1,
+        "baseline_mean_cqi": 46.8,
+        "cqi_improvement_pct": 0.64,
+        "significant": false,
+        "effect_size": 0.1297
+      }
+    },
+    {
+      "name": "identity",
+      "control": {
+        "conversation_name": "identity_baseline",
+        "inputs_count": 4,
+        "mean_phi": 0.1331,
+        "mean_cqi": 46.8,
+        "final_phi": 0.2087,
+        "final_cqi": 48.5,
+        "total_cycles": 4,
+        "duration_ms": 1.4,
+        "memory_count": 5
+      },
+      "experimental": {
+        "conversation_name": "identity",
+        "inputs_count": 4,
+        "mean_phi": 0.1327,
+        "mean_cqi": 47.12,
+        "final_phi": 0.1981,
+        "final_cqi": 48.5,
+        "total_cycles": 4,
+        "duration_ms": 1.2,
+        "memory_count": 5
+      },
+      "comparison": {
+        "kernel_mean_phi": 0.1327,
+        "baseline_mean_phi": 0.1331,
+        "phi_improvement_pct": -0.29,
+        "kernel_mean_cqi": 47.12,
+        "baseline_mean_cqi": 46.8,
+        "cqi_improvement_pct": 0.69,
+        "significant": false,
+        "effect_size": 0.1401
+      }
+    },
+    {
+      "name": "temporal",
+      "control": {
+        "conversation_name": "temporal_baseline",
+        "inputs_count": 4,
+        "mean_phi": 0.1336,
+        "mean_cqi": 46.83,
+        "final_phi": 0.2083,
+        "final_cqi": 48.5,
+        "total_cycles": 4,
+        "duration_ms": 1.4,
+        "memory_count": 5
+      },
+      "experimental": {
+        "conversation_name": "temporal",
+        "inputs_count": 4,
+        "mean_phi": 0.1334,
+        "mean_cqi": 47.3,
+        "final_phi": 0.1955,
+        "final_cqi": 48.5,
+        "total_cycles": 4,
+        "duration_ms": 1.2,
+        "memory_count": 5
+      },
+      "comparison": {
+        "kernel_mean_phi": 0.1334,
+        "baseline_mean_phi": 0.1336,
+        "phi_improvement_pct": -0.19,
+        "kernel_mean_cqi": 47.3,
+        "baseline_mean_cqi": 46.83,
+        "cqi_improvement_pct": 1.01,
+        "significant": false,
+        "effect_size": 0.2047
+      }
+    }
+  ],
+  "ablation_results": [
+    {
+      "primitive_name": "valence",
+      "full_cqi": 49.4,
+      "ablated_cqi": 48.4,
+      "cqi_impact_pct": 2.02,
+      "full_phi": 0.2236,
+      "ablated_phi": 0.2068,
+      "phi_impact_pct": 7.49
+    },
+    {
+      "primitive_name": "working_memory",
+      "full_cqi": 49.4,
+      "ablated_cqi": 42.6,
+      "cqi_impact_pct": 13.77,
+      "full_phi": 0.2236,
+      "ablated_phi": 0.0,
+      "phi_impact_pct": 100.0
+    },
+    {
+      "primitive_name": "temporal",
+      "full_cqi": 49.4,
+      "ablated_cqi": 49.4,
+      "cqi_impact_pct": 0.0,
+      "full_phi": 0.2236,
+      "ablated_phi": 0.2236,
+      "phi_impact_pct": -0.0
+    }
+  ],
+  "overall_phi": 0.1287,
+  "overall_cqi": 47.11,
+  "overall_improvement_pct": 0.92,
+  "summary": "Benchmark completed: 5 A/B tests, 3 ablation tests. Mean CQI: 47.1. Mean Phi: 0.1287.",
+  "phi_histories": {
+    "greeting": [
+      0.0,
+      0.132,
+      0.2018
+    ],
+    "emotional": [
+      0.0,
+      0.1242,
+      0.1885,
+      0.2236
+    ],
+    "memory_recall": [
+      0.0,
+      0.1318,
+      0.2046,
+      0.1916
+    ],
+    "identity": [
+      0.0,
+      0.1327,
+      0.2002,
+      0.1981
+    ],
+    "temporal": [
+      0.0,
+      0.1326,
+      0.2054,
+      0.1955
+    ]
+  },
+  "cqi_histories": {
+    "greeting": [
+      43.7,
+      47.8,
+      48.7
+    ],
+    "emotional": [
+      43.9,
+      47.6,
+      48.3,
+      49.4
+    ],
+    "memory_recall": [
+      43.7,
+      47.6,
+      48.7,
+      48.4
+    ],
+    "identity": [
+      43.7,
+      47.7,
+      48.6,
+      48.5
+    ],
+    "temporal": [
+      43.9,
+      47.9,
+      48.9,
+      48.5
+    ]
+  },
+  "duration_seconds": 0.03
+}

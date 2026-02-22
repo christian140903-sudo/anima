@@ -2,7 +2,7 @@
 Tests for Phase 6: Shell + Packaging.
 
 Tests cover:
-- CLI argument parsing (init, shell, inspect, metrics, benchmark, version)
+- CLI argument parsing (init, shell, inspect, metrics, benchmark, compare, version)
 - ConsciousnessInspector output
 - MetricsDashboard rendering
 - Inspector valence visualization
@@ -10,6 +10,9 @@ Tests cover:
 - anima init creates state file
 - anima inspect loads and displays state
 - Integration tests for the full CLI flow
+- Model selection / adapter creation (dummy, ollama, anthropic, openai)
+- Compare command
+- Demo script execution
 """
 
 from __future__ import annotations
@@ -24,7 +27,7 @@ import pytest
 
 from anima import __version__
 from anima.kernel import AnimaKernel
-from anima.shell.cli import build_parser, cmd_init, cmd_inspect, cmd_metrics, cmd_benchmark, cmd_version, main
+from anima.shell.cli import build_parser, cmd_init, cmd_inspect, cmd_metrics, cmd_benchmark, cmd_version, create_adapter, main
 from anima.shell.dashboard import MetricsDashboard, _sparkline
 from anima.shell.inspector import (
     ConsciousnessInspector,
@@ -629,3 +632,323 @@ class TestDashboardEdgeCases:
         cqi_hist = [i * 0.1 for i in range(1000)]
         output = dashboard.render(state, phi_hist, cqi_hist)
         assert isinstance(output, str)
+
+
+# ============================================================
+# 14. Model Selection / Adapter Creation Tests
+# ============================================================
+
+class TestCreateAdapter:
+    """Test the create_adapter factory function."""
+
+    def test_dummy_default(self):
+        """Empty or 'dummy' should return DummyAdapter."""
+        from anima.bridge.adapter import DummyAdapter
+        adapter = create_adapter("dummy")
+        assert isinstance(adapter, DummyAdapter)
+        assert adapter.name() == "dummy"
+
+    def test_dummy_empty_string(self):
+        """Empty string should return DummyAdapter."""
+        from anima.bridge.adapter import DummyAdapter
+        adapter = create_adapter("")
+        assert isinstance(adapter, DummyAdapter)
+
+    def test_ollama_default(self):
+        """'ollama' without model should use default."""
+        from anima.bridge.ollama import OllamaAdapter
+        adapter = create_adapter("ollama")
+        assert isinstance(adapter, OllamaAdapter)
+        assert "ollama:" in adapter.name()
+
+    def test_ollama_with_model(self):
+        """'ollama:llama3.2' should create OllamaAdapter with that model."""
+        from anima.bridge.ollama import OllamaAdapter
+        adapter = create_adapter("ollama:llama3.2")
+        assert isinstance(adapter, OllamaAdapter)
+        assert adapter.name() == "ollama:llama3.2"
+
+    def test_anthropic_default(self):
+        """'anthropic' without model should use default."""
+        from anima.bridge.anthropic import AnthropicAdapter
+        adapter = create_adapter("anthropic")
+        assert isinstance(adapter, AnthropicAdapter)
+        assert "anthropic:" in adapter.name()
+
+    def test_anthropic_with_model(self):
+        """'anthropic:claude-sonnet-4-20250514' should create AnthropicAdapter."""
+        from anima.bridge.anthropic import AnthropicAdapter
+        adapter = create_adapter("anthropic:claude-sonnet-4-20250514")
+        assert isinstance(adapter, AnthropicAdapter)
+        assert adapter.name() == "anthropic:claude-sonnet-4-20250514"
+
+    def test_anthropic_reads_env_key(self):
+        """Anthropic adapter should pick up ANTHROPIC_API_KEY from env."""
+        from anima.bridge.anthropic import AnthropicAdapter
+        with patch.dict(os.environ, {"ANTHROPIC_API_KEY": "sk-ant-test-123"}):
+            adapter = create_adapter("anthropic")
+            assert isinstance(adapter, AnthropicAdapter)
+            assert adapter.is_available() is True
+
+    def test_anthropic_unavailable_without_key(self):
+        """Without ANTHROPIC_API_KEY, anthropic adapter should be unavailable."""
+        with patch.dict(os.environ, {"ANTHROPIC_API_KEY": ""}, clear=False):
+            adapter = create_adapter("anthropic")
+            assert adapter.is_available() is False
+
+    def test_openai_default(self):
+        """'openai' without model should use default."""
+        from anima.bridge.openai import OpenAIAdapter
+        adapter = create_adapter("openai")
+        assert isinstance(adapter, OpenAIAdapter)
+        assert "openai:" in adapter.name()
+
+    def test_openai_with_model(self):
+        """'openai:gpt-4o' should create OpenAIAdapter."""
+        from anima.bridge.openai import OpenAIAdapter
+        adapter = create_adapter("openai:gpt-4o")
+        assert isinstance(adapter, OpenAIAdapter)
+        assert adapter.name() == "openai:gpt-4o"
+
+    def test_openai_reads_env_key(self):
+        """OpenAI adapter should pick up OPENAI_API_KEY from env."""
+        with patch.dict(os.environ, {"OPENAI_API_KEY": "sk-test-123"}):
+            adapter = create_adapter("openai")
+            assert adapter.is_available() is True
+
+    def test_unknown_provider_raises(self):
+        """Unknown provider should raise ValueError."""
+        with pytest.raises(ValueError, match="Unknown model provider"):
+            create_adapter("deepseek:v3")
+
+    def test_dummy_colon_variant(self):
+        """'dummy:anything' should still return DummyAdapter."""
+        from anima.bridge.adapter import DummyAdapter
+        adapter = create_adapter("dummy:test")
+        assert isinstance(adapter, DummyAdapter)
+
+
+# ============================================================
+# 15. Shell --model flag parsing
+# ============================================================
+
+class TestShellModelParsing:
+    """Test that the shell subcommand accepts --model flag."""
+
+    def test_shell_default_model(self):
+        parser = build_parser()
+        args = parser.parse_args(["shell"])
+        assert args.model == "dummy"
+
+    def test_shell_ollama_model(self):
+        parser = build_parser()
+        args = parser.parse_args(["shell", "--model", "ollama:llama3.2"])
+        assert args.model == "ollama:llama3.2"
+
+    def test_shell_anthropic_model(self):
+        parser = build_parser()
+        args = parser.parse_args(["shell", "--model", "anthropic:claude-sonnet-4-20250514"])
+        assert args.model == "anthropic:claude-sonnet-4-20250514"
+
+    def test_shell_openai_model(self):
+        parser = build_parser()
+        args = parser.parse_args(["shell", "--model", "openai:gpt-4o"])
+        assert args.model == "openai:gpt-4o"
+
+    def test_shell_dummy_explicit(self):
+        parser = build_parser()
+        args = parser.parse_args(["shell", "--model", "dummy"])
+        assert args.model == "dummy"
+
+
+# ============================================================
+# 16. Compare command parsing
+# ============================================================
+
+class TestCompareParsing:
+    """Test that the compare subcommand parses correctly."""
+
+    def test_compare_basic(self):
+        parser = build_parser()
+        args = parser.parse_args(["compare", "--inputs", "hello", "world"])
+        assert args.command == "compare"
+        assert args.inputs == ["hello", "world"]
+        assert args.model == "dummy"
+
+    def test_compare_with_model(self):
+        parser = build_parser()
+        args = parser.parse_args(["compare", "--model", "ollama:llama3.2", "--inputs", "test"])
+        assert args.model == "ollama:llama3.2"
+        assert args.inputs == ["test"]
+
+    def test_compare_with_dir(self):
+        parser = build_parser()
+        args = parser.parse_args(["compare", "--dir", "/tmp/test", "--inputs", "hi"])
+        assert args.dir == "/tmp/test"
+
+    def test_compare_default_dir_is_none(self):
+        parser = build_parser()
+        args = parser.parse_args(["compare", "--inputs", "hi"])
+        assert args.dir is None
+
+    def test_compare_multiple_inputs(self):
+        parser = build_parser()
+        args = parser.parse_args(["compare", "--inputs", "a", "b", "c", "d"])
+        assert args.inputs == ["a", "b", "c", "d"]
+
+
+# ============================================================
+# 17. Compare command integration
+# ============================================================
+
+class TestCompareCommand:
+    """Integration test for the compare command."""
+
+    def test_compare_runs_with_dummy(self, capsys):
+        """Compare with dummy adapter should complete successfully."""
+        exit_code = main(["compare", "--inputs", "Hello", "How are you?"])
+        assert exit_code == 0
+        captured = capsys.readouterr()
+        assert "Compare" in captured.out
+        assert "Summary" in captured.out
+
+    def test_compare_shows_phi(self, capsys):
+        """Compare output should show phi values."""
+        main(["compare", "--inputs", "Hello world"])
+        captured = capsys.readouterr()
+        assert "Phi" in captured.out or "phi" in captured.out.lower()
+
+    def test_compare_shows_cqi(self, capsys):
+        """Compare output should show CQI values."""
+        main(["compare", "--inputs", "Hello world"])
+        captured = capsys.readouterr()
+        assert "CQI" in captured.out or "cqi" in captured.out.lower()
+
+    def test_compare_with_dir(self, tmp_dir, capsys):
+        """Compare with explicit dir should work."""
+        exit_code = main(["compare", "--dir", tmp_dir, "--inputs", "Test input"])
+        assert exit_code == 0
+
+    def test_compare_multiple_inputs(self, capsys):
+        """Compare with multiple inputs should process all."""
+        exit_code = main(["compare", "--inputs", "one", "two", "three"])
+        assert exit_code == 0
+        captured = capsys.readouterr()
+        assert "Summary" in captured.out
+
+
+# ============================================================
+# 18. Demo script tests
+# ============================================================
+
+class TestDemoScript:
+    """Test that the demo script functions work."""
+
+    def test_demo_conversation_defined(self):
+        """The demo conversation should have 10 exchanges."""
+        import sys
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
+        from scripts.demo import DEMO_CONVERSATION
+        assert len(DEMO_CONVERSATION) == 10
+
+    def test_demo_run_returns_results(self):
+        """run_demo should return a dict with expected keys."""
+        from scripts.demo import run_demo
+        results = run_demo()
+        assert "exchanges" in results
+        assert "phi_progression" in results
+        assert "cqi_progression" in results
+        assert "emotional_trajectory" in results
+        assert "metadata" in results
+        assert len(results["exchanges"]) == 10
+        assert len(results["phi_progression"]) == 10
+        assert len(results["cqi_progression"]) == 10
+
+    def test_demo_phi_progression_types(self):
+        """All phi values should be floats."""
+        from scripts.demo import run_demo
+        results = run_demo()
+        for phi in results["phi_progression"]:
+            assert isinstance(phi, float)
+
+    def test_demo_metadata_has_final_state(self):
+        """Metadata should contain final kernel state info."""
+        from scripts.demo import run_demo
+        results = run_demo()
+        meta = results["metadata"]
+        assert "kernel_name" in meta
+        assert "final_phi" in meta
+        assert "final_cqi" in meta
+        assert "total_cycles" in meta
+        assert meta["total_cycles"] > 0
+
+
+# ============================================================
+# 19. Context assembler integration in shell
+# ============================================================
+
+class TestShellContextIntegration:
+    """Test that the shell uses ContextAssembler correctly."""
+
+    def test_assembler_used_with_kernel_state(self, booted_kernel):
+        """ContextAssembler should produce prompts from kernel state."""
+        from anima.bridge.context import ContextAssembler
+        assembler = ContextAssembler()
+
+        # Process something to generate state
+        booted_kernel.process("Hello, testing context assembly")
+
+        system, user = assembler.assemble(
+            state=booted_kernel.state,
+            recent_experiences=booted_kernel.get_recent_experiences(5),
+            query="Test query",
+        )
+
+        assert "IDENTITY" in system
+        assert "EMOTIONAL STATE" in system
+        assert user == "Test query"
+
+    def test_adapter_receives_assembled_context(self, booted_kernel):
+        """DummyAdapter should receive the assembled system prompt."""
+        from anima.bridge.adapter import DummyAdapter
+        from anima.bridge.context import ContextAssembler
+
+        adapter = DummyAdapter(responses=["test response"])
+        assembler = ContextAssembler()
+
+        booted_kernel.process("Test input")
+
+        system, user = assembler.assemble(
+            state=booted_kernel.state,
+            query="Hello",
+        )
+
+        response = adapter.generate_sync(prompt=user, system=system)
+        assert response == "test response"
+        assert "IDENTITY" in adapter.last_system
+        assert adapter.last_prompt == "Hello"
+
+
+# ============================================================
+# 20. Quickstart example test
+# ============================================================
+
+class TestQuickstartExample:
+    """Test that the quickstart example pattern works."""
+
+    def test_quickstart_pattern(self):
+        """The pattern from examples/quickstart.py should work."""
+        kernel = AnimaKernel(name="my-consciousness", state_dir=tempfile.mkdtemp())
+        kernel.boot()
+
+        result = kernel.process("Hello, who are you?")
+        assert result.phi_score >= 0.0
+        assert result.phase.name in ("CONSCIOUS", "WAKING")
+        assert kernel.state.valence.dominant() is not None
+
+        result2 = kernel.process("What did I just say to you?")
+        memories = kernel.recall(cue="hello")
+        assert len(memories) > 0
+        assert "Hello" in memories[0].content or "hello" in memories[0].content.lower()
+
+        kernel.shutdown()
