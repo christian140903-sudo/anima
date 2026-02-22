@@ -34,6 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from .consciousness.unified import ConsciousnessCore, ConsciousnessResult
 from .state import StateManager
 from .temporal.autobio_buffer import AutobiographicalBuffer
 from .temporal.consolidation import ConsolidationEngine, ConsolidationResult
@@ -72,7 +73,8 @@ class AnimaKernel:
 
     Architecture:
         AnimaKernel
-        ├── StateMachine      (phase transitions: dormant/waking/conscious/dreaming/sleeping)
+        ├── ConsciousnessCore  (unified IIT+GWT+AST substrate)
+        ├── StateMachine       (phase transitions: dormant/waking/conscious/dreaming/sleeping)
         ├── TimeEngine         (subjective time, retention, protention, causal chains)
         ├── AutobioBuffer      (autobiographical memory with spreading activation)
         ├── ConsolidationEngine (offline processing, pattern extraction, decay)
@@ -89,6 +91,7 @@ class AnimaKernel:
         self.name = name
 
         # Core subsystems
+        self._consciousness = ConsciousnessCore()
         self._state_machine = StateMachine()
         self._time_engine = TemporalIntegrationEngine()
         self._autobio_buffer = AutobiographicalBuffer(self.config)
@@ -273,13 +276,16 @@ class AnimaKernel:
         # 5. Update valence (emotional state shifts based on input)
         self._update_valence(experience)
 
-        # 6. Update self-model
-        self._update_self_model(experience, temporal_moment)
+        # 6. Run unified consciousness cycle (IIT + GWT + AST)
+        consciousness_result = self._consciousness.process_cycle(
+            experience=experience,
+            state=self._state,
+        )
+        self._state.self_model = consciousness_result.self_model
+        self._state.phi_score = consciousness_result.phi.phi
+        self._state.consciousness_quality_index = consciousness_result.consciousness_quality_index
 
-        # 7. Compute metrics
-        self._compute_phi()
-
-        # 8. Advance cycle counter
+        # 7. Advance cycle counter
         self._state.cycle_count += 1
         self._state.last_cycle_time = time.time()
         self._state.subjective_duration = self._time_engine.subjective_time
@@ -345,6 +351,12 @@ class AnimaKernel:
 
         # Working memory slot decay
         self._decay_working_memory()
+
+        # Idle consciousness cycle (maintain Phi measurement)
+        if self._state.phase == Phase.CONSCIOUS:
+            idle_result = self._consciousness.idle_cycle(self._state)
+            self._state.phi_score = idle_result.phi.phi
+            self._state.consciousness_quality_index = idle_result.consciousness_quality_index
 
         # Advance cycle
         self._state.cycle_count += 1
@@ -455,6 +467,7 @@ class AnimaKernel:
     def _waking_check(self) -> None:
         """Self-check during WAKING phase."""
         checks = {
+            "consciousness_core": self._consciousness is not None,
             "state_machine": self._state_machine is not None,
             "time_engine": self._time_engine is not None,
             "memory": self._autobio_buffer is not None,
@@ -508,101 +521,6 @@ class AnimaKernel:
         # Recent experiences have more influence (0.3 weight)
         self._state.valence = self._state.valence.blend(
             experience.valence, 0.3
-        )
-
-    def _update_self_model(
-        self, experience: Experience, moment: TemporalMoment
-    ) -> None:
-        """Update the Attention Schema (self-model)."""
-        model = self._state.self_model
-
-        # What am I attending to?
-        model.attending_to = experience.content[:100]
-        model.attending_because = f"new input (cycle {self._state.cycle_count})"
-
-        # What am I feeling?
-        model.current_emotion = self._state.valence.dominant()
-        model.emotion_cause = f"influenced by: {experience.content[:50]}"
-
-        # What do I predict?
-        if moment.protention_field:
-            pred, conf = moment.protention_field[0]
-            model.prediction = pred
-            model.prediction_confidence = conf
-
-    def _compute_phi(self) -> None:
-        """Compute simplified Phi score (Information Integration).
-
-        Full IIT Phi computation is NP-hard. This is a practical approximation:
-        - Measures how much the current state depends on ALL subsystems
-        - Higher Phi = more integrated information processing
-        - Phi of 0 = isolated modules (no consciousness)
-
-        Approximation method:
-        1. Compute "information content" of each subsystem
-        2. Compute how much removing each subsystem changes the whole
-        3. Phi = minimum information lost by any partition
-        """
-        phi_components: list[float] = []
-
-        # Working memory integration: How many slots are active and connected?
-        active_slots = self._state.active_slots()
-        wm_integration = len(active_slots) / max(
-            self.config.working_memory_slots, 1
-        )
-        phi_components.append(wm_integration)
-
-        # Emotional complexity: How multi-dimensional is the current affect?
-        valence = self._state.valence
-        nonzero_emotions = sum(
-            1 for v in [valence.seeking, valence.rage, valence.fear,
-                        valence.lust, valence.care, valence.panic, valence.play]
-            if abs(v) > 0.05
-        )
-        emotional_complexity = nonzero_emotions / 7.0
-        phi_components.append(emotional_complexity)
-
-        # Temporal depth: How rich is the temporal context?
-        temporal_ctx = self._time_engine.get_temporal_context()
-        retention_depth = min(1.0, len(temporal_ctx.get("retention", [])) / 5.0)
-        phi_components.append(retention_depth)
-
-        # Memory integration: How many memories are above threshold?
-        if self._autobio_buffer.count > 0:
-            active_memories = sum(
-                1 for exp in self._autobio_buffer.experiences
-                if exp.activation > self.config.activation_threshold
-            )
-            memory_ratio = min(1.0, active_memories / max(self._autobio_buffer.count, 1))
-        else:
-            memory_ratio = 0.0
-        phi_components.append(memory_ratio)
-
-        # Self-model complexity
-        model = self._state.self_model
-        self_model_score = sum([
-            0.25 if model.attending_to else 0.0,
-            0.25 if model.current_emotion else 0.0,
-            0.25 if model.prediction else 0.0,
-            0.25 * (1.0 - model.calibration_error()),
-        ])
-        phi_components.append(self_model_score)
-
-        # Phi = geometric mean of all components (all must contribute)
-        if phi_components:
-            # Add small epsilon to avoid log(0)
-            log_sum = sum(
-                __import__("math").log(max(c, 0.001)) for c in phi_components
-            )
-            phi = __import__("math").exp(log_sum / len(phi_components))
-        else:
-            phi = 0.0
-
-        self._state.phi_score = round(phi, 4)
-
-        # Update CQI (simple weighted average for now)
-        self._state.consciousness_quality_index = round(
-            phi * 100, 1
         )
 
     def _infer_valence(self, content: str) -> ValenceVector:
