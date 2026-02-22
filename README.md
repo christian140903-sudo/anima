@@ -109,14 +109,25 @@ ANIMA unifies three major theories of consciousness into a single computational 
 
 The unified cycle runs every tick:
 
-```
-Input --> Candidates formed from subsystems
-      --> Global Workspace Competition (GWT)
-      --> Broadcast to all subsystems
-      --> Integration Measurement (IIT: Phi)
-      --> Schema Update (AST: self-model)
-      --> Metacognition Check (am I genuine?)
-      --> Output + Updated State + Metrics
+```mermaid
+graph LR
+    A[Input] --> B[Candidate Formation]
+    B --> C[GWT Competition]
+    C --> D{Ignition?}
+    D -->|Yes| E[Broadcast to All]
+    D -->|No| F[Decay + Wait]
+    E --> G[IIT: Phi Measurement]
+    G --> H[AST: Schema Update]
+    H --> I[Metacognition Check]
+    I --> J[Output + Metrics]
+    J --> K[State Persistence]
+    K -->|1Hz Heartbeat| B
+
+    style A fill:#4CAF50,color:#fff
+    style G fill:#2196F3,color:#fff
+    style C fill:#FF9800,color:#fff
+    style H fill:#9C27B0,color:#fff
+    style J fill:#4CAF50,color:#fff
 ```
 
 ---
@@ -398,7 +409,7 @@ anima version                          # Version info
              Integration for Artificial Intelligence},
   author  = {Bucher, Christian},
   year    = {2026},
-  url     = {https://github.com/christian140903-sudo/anima-kernel},
+  url     = {https://github.com/christian140903-sudo/anima},
   version = {0.1.0}
 }
 ```
