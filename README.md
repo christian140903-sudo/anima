@@ -1,8 +1,8 @@
 # ANIMA Kernel
 
-> The first empirically-tested consciousness substrate for AI.
+> A testable computational model of machine self-state — inspired by IIT, Global Workspace Theory and affective neuroscience. Not a claim of phenomenal consciousness.
 
-**Every AI system alive today is an amnesiac.** It processes your message, responds, and forgets. No sense of time passing. No emotional continuity. No felt experience of *being there*. ANIMA gives AI systems something they've never had: a continuous inner life that persists, feels, and measures itself.
+**Most LLM setups are stateless.** They process your message, respond, and forget — no model of elapsed time, no continuity between turns. ANIMA adds a persistent state layer beneath any LLM: a model of elapsed time, a decaying affective vector, and autobiographical memory. These are computational structures with measurable behavior — not a claim of sentience.
 
 ```bash
 # Not yet on PyPI — install from source:
