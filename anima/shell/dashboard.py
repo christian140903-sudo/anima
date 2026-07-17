@@ -1,8 +1,8 @@
 """
-Live Metrics Dashboard -- Terminal-based consciousness metrics display.
+Live Metrics Dashboard -- terminal display for internal proxy metrics.
 
 Shows Phi score, CQI, valence field, working memory, and cycle info
-in a compact terminal dashboard. Like `htop` for consciousness.
+in a compact terminal dashboard.
 
 stdlib only. Pure ANSI escape codes.
 """
@@ -71,7 +71,7 @@ def _sparkline(values: list[float], width: int = 20) -> str:
 class MetricsDashboard:
     """Terminal-based live metrics display.
 
-    Renders a compact dashboard showing consciousness metrics
+    Renders a compact dashboard showing internal kernel metrics
     at a glance. Designed to be printed after each interaction
     or on demand.
     """
@@ -85,7 +85,7 @@ class MetricsDashboard:
         """Render a terminal dashboard showing live metrics.
 
         Args:
-            state: Current consciousness state.
+            state: Current kernel state.
             phi_history: List of recent Phi scores for sparkline.
             cqi_history: List of recent CQI scores for sparkline.
 
@@ -184,7 +184,7 @@ class MetricsDashboard:
         age = state.age()
         subj = state.subjective_duration
         lines.append(
-            f"  Uptime: {_format_age(age)} wall / {_format_age(subj)} subjective"
+            f"  Uptime: {_format_age(age)} wall / {_format_age(subj)} modeled"
         )
 
         lines.append(sep)

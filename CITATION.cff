@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If ANIMA supports your work, please cite the software using this metadata."
+title: "ANIMA Kernel: A Cognitive State Engine for Stateful AI Agents"
+type: software
+version: 0.1.1
+date-released: 2026-07-17
+authors:
+  - family-names: Bucher
+    given-names: Christian
+url: "https://github.com/christian140903-sudo/anima"
+repository-code: "https://github.com/christian140903-sudo/anima"
+license: MIT
+keywords:
+  - AI agents
+  - cognitive architecture
+  - state machine
+  - associative memory
+  - global workspace
+  - temporal context
+abstract: >-
+  ANIMA is a zero-runtime-dependency Python engine for durable agent state,
+  workspace competition, affect-inspired signals, associative memory, temporal
+  context, self-model instrumentation, and implementation-defined proxy metrics.

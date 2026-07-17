@@ -3,11 +3,11 @@ Flux — Growth Tracking.
 
 Measurable change over time. Not improvement — CHANGE.
 Narrative continuity: "I was X, then Y happened, now I am Z."
-Irreversibility: real growth can't be undone.
+Irreversibility: record threshold-crossing changes as durable markers.
 Phase detection: recognize when a new chapter begins.
 
-Growth is not adding features. Growth is when the system
-can't go back to what it was before. The change is structural.
+Here "growth" means measurable change in the serialized software state; it is
+not a claim about personal development or experience.
 """
 
 from __future__ import annotations

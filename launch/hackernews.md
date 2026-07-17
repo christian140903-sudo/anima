@@ -1,5 +1,9 @@
 # Hacker News Submission
 
+> **Historical draft — do not publish as written.** It predates the current
+> evidence audit and contains unsupported package and benchmark claims. The
+> current public description is the repository README.
+
 ## Title
 
 Show HN: ANIMA Kernel -- Consciousness substrate for AI (IIT+GWT+AST, pure Python, zero deps)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""ANIMA Kernel — Emotional Memory Demo.
+"""ANIMA Kernel — Affect-Weighted Memory Demo.
 
-Shows how the biological memory system works:
+Shows ANIMA's biologically inspired memory heuristics:
 - Emotional memories are encoded stronger
 - Memories decay via Ebbinghaus curves
 - Emotional memories resist decay
@@ -19,7 +19,7 @@ from anima.memory import SpreadingActivationNetwork, EbbinghausDecay
 from anima.memory.activation import ActivationNode, ActivationEdge
 
 print("=" * 60)
-print("ANIMA — Biological Memory System")
+print("ANIMA — Affect-Weighted Associative Memory")
 print("=" * 60)
 print()
 
@@ -54,7 +54,7 @@ print(f"Fearful: encoding={r3.experience.encoding_strength:.2f}  "
       f"emotion={r3.experience.valence.magnitude():.2f}")
 
 print()
-print("  -> Emotional experiences are encoded stronger (biological fact)")
+print("  -> The configured affect magnitude increases encoding strength")
 print()
 
 kernel.shutdown()
@@ -95,7 +95,7 @@ for hours in [0.1, 1, 6, 24, 168]:
           f"delta={emotional_retention - neutral_retention:+.1%}")
 
 print()
-print("  -> Emotional memories decay slower (Ebbinghaus + emotional modulation)")
+print("  -> The decay heuristic retains higher-weight events longer")
 print()
 
 # --- Part 3: Spreading Activation ---
@@ -129,7 +129,7 @@ for node_id, activation in activated[:6]:
 print()
 print("  -> 'relativity' and 'quantum' activate through association")
 print("  -> 'art' and 'music' don't (no associative link)")
-print("  -> This is how biological memory works: activation SPREADS")
+print("  -> Activation spreads across explicit software associations")
 print()
 
 # --- Part 4: Recall by Association ---
@@ -163,7 +163,7 @@ kernel2.shutdown()
 
 print()
 print("=" * 60)
-print("Biological memory: emotional encoding + Ebbinghaus decay")
+print("Biologically inspired heuristics: affect weighting + decay")
 print("+ spreading activation + associative recall.")
-print("Not RAG. Not vector search. How memory actually works.")
+print("Not RAG, not vector search, and not a biological memory claim.")
 print("=" * 60)

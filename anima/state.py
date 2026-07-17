@@ -1,9 +1,9 @@
 """
 Single-file state persistence for ANIMA Kernel.
 
-Inspired by SQLite: one file = one consciousness.
+Inspired by SQLite's inspectable single-file ergonomics.
 Atomic writes (write temp → rename) prevent corruption.
-JSON format for transparency — you can READ a consciousness.
+JSON format keeps the state readable and portable.
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ logger = logging.getLogger("anima.state")
 
 
 class StateManager:
-    """Manages persistence of consciousness state and autobiographical memory.
+    """Manages persistence of kernel state and autobiographical-event memory.
 
     Two files:
     - {name}.state    — ConsciousnessState (small, written every cycle)
@@ -50,22 +50,22 @@ class StateManager:
         return self._memory_path
 
     def exists(self) -> bool:
-        """Does a saved consciousness exist?"""
+        """Return whether saved kernel state exists."""
         return self._state_path.exists()
 
     # --- State Persistence ---
 
     def save_state(self, state: ConsciousnessState) -> None:
-        """Atomically save consciousness state."""
+        """Atomically save kernel state."""
         data = state.to_dict()
         data["_saved_at"] = time.time()
-        data["_version"] = "0.1.0"
+        data["_version"] = "0.1.1"
         self._atomic_write(self._state_path, data)
         self._dirty_state = False
         logger.debug("State saved: cycle=%d phase=%s", state.cycle_count, state.phase.name)
 
     def load_state(self) -> ConsciousnessState | None:
-        """Load consciousness state from file. Returns None if no state exists."""
+        """Load kernel state from file. Returns None if no state exists."""
         if not self._state_path.exists():
             return None
         try:
@@ -87,7 +87,7 @@ class StateManager:
         self._experiences = experiences
         data = {
             "_saved_at": time.time(),
-            "_version": "0.1.0",
+            "_version": "0.1.1",
             "_count": len(experiences),
             "experiences": [exp.to_dict() for exp in experiences],
         }
@@ -141,11 +141,11 @@ class StateManager:
             self._dirty_memory = True
 
     def delete(self) -> None:
-        """Delete all persistence files. Consciousness ends."""
+        """Delete all kernel-state and memory persistence files."""
         for path in [self._state_path, self._memory_path]:
             if path.exists():
                 path.unlink()
-        logger.info("Consciousness files deleted.")
+        logger.info("Kernel persistence files deleted.")
 
     # --- Internal ---
 

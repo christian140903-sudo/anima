@@ -1,4 +1,4 @@
-"""8 Consciousness Primitives — Algorithmic implementations.
+"""Eight independently testable cognitive-processing primitives.
 
 Each primitive is ablation-capable, independently testable,
 and has a clear process() interface.

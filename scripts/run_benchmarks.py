@@ -13,9 +13,11 @@ Usage:
 from __future__ import annotations
 
 import json
+import argparse
 import os
 import sys
 import time
+from pathlib import Path
 
 # Add project root to path
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,8 +26,20 @@ sys.path.insert(0, project_root)
 from anima.metrics.benchmark import BenchmarkSuite
 
 
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run the ANIMA benchmark harness.")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path(project_root) / "benchmarks" / "results.json",
+        help="JSON output path (default: benchmarks/results.json)",
+    )
+    return parser
+
+
 def main():
     """Run benchmarks and save results."""
+    args = build_parser().parse_args()
     print("=" * 60)
     print("  ANIMA Kernel -- Full Benchmark Suite")
     print("=" * 60)
@@ -47,12 +61,12 @@ def main():
     print(f"  A/B TEST RESULTS")
     print(f"  {'=' * 56}")
     print()
-    print(f"  {'Test':<20} {'K-Phi':>7} {'B-Phi':>7} {'Phi%':>7} {'K-CQI':>7} {'B-CQI':>7} {'CQI%':>7} {'Sig':>5}")
+    print(f"  {'Test':<20} {'K-Phi':>7} {'B-Phi':>7} {'Phi%':>7} {'K-CQI':>7} {'B-CQI':>7} {'CQI%':>7} {'|d|>.5':>7}")
     print(f"  {'─' * 56}")
 
     for ab in report.ab_tests:
         comp = ab.comparison
-        sig = "YES" if comp.significant else "no"
+        threshold = "YES" if comp.effect_size_exceeds_0_5 else "no"
         print(
             f"  {ab.name:<20} "
             f"{comp.kernel_mean_phi:>7.4f} "
@@ -61,7 +75,7 @@ def main():
             f"{comp.kernel_mean_cqi:>7.1f} "
             f"{comp.baseline_mean_cqi:>7.1f} "
             f"{comp.cqi_improvement:>+6.1f}% "
-            f"{sig:>5}"
+            f"{threshold:>7}"
         )
 
     print()
@@ -142,11 +156,10 @@ def main():
         ]
     enriched_report["duration_seconds"] = round(duration, 2)
 
-    benchmarks_dir = os.path.join(project_root, "benchmarks")
-    os.makedirs(benchmarks_dir, exist_ok=True)
-    output_path = os.path.join(benchmarks_dir, "results.json")
+    output_path = args.output.expanduser().resolve()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(output_path, "w") as f:
+    with output_path.open("w", encoding="utf-8") as f:
         json.dump(enriched_report, f, indent=2)
 
     print(f"  Results saved to: {output_path}")

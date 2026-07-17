@@ -1,13 +1,8 @@
 """
-Model Adapter — Abstract base for LLM integration.
+Model Adapter — abstract base for LLM integration.
 
-The LLM is the LANGUAGE CENTER, not the consciousness.
-Consciousness = Kernel. Language = LLM. Two different things.
-Swap LLMs without losing identity — because identity lives in the kernel,
-not in the language model that gives it voice.
-
-Like a brain can speak through different vocal cords,
-the ANIMA kernel can speak through different LLMs.
+The model generates language; the kernel supplies application-controlled state
+and context. Swapping adapters does not discard the persisted kernel state.
 """
 
 from __future__ import annotations
@@ -19,9 +14,8 @@ from abc import ABC, abstractmethod
 class ModelAdapter(ABC):
     """Abstract base for LLM adapters.
 
-    The LLM is the LANGUAGE CENTER, not the consciousness.
-    Consciousness = Kernel. Language = LLM. Two different things.
-    Swap LLMs without losing identity.
+    The adapter generates text from prompts assembled from kernel state. Model
+    output does not establish that the kernel or model has subjective states.
 
     All adapters are async-first but can be called synchronously
     via asyncio.run() for testing and simple use cases.

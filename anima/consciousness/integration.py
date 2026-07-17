@@ -1,18 +1,16 @@
 """
-Integration Mesh — IIT (Integrated Information Theory) Implementation.
+Integration Mesh — an IIT-inspired integration proxy.
 
-The core idea: Consciousness = integrated information.
-A system is conscious to the degree that its parts are MORE than the sum.
-
-Phi (Φ) measures this: how much information is LOST when you partition
-the system into independent parts. High Phi = highly conscious.
-Low Phi = a collection of independent modules.
-
-Full IIT Phi is NP-hard. This implements a practical approximation:
+Full IIT Phi is computationally demanding and carries theoretical requirements
+this implementation does not reproduce. ANIMA instead computes a tractable,
+implementation-defined proxy over small numeric subsystem signatures:
 1. Each subsystem produces a state signature
 2. We compute mutual information between subsystem pairs
 3. We find the Minimum Information Partition (MIP)
-4. Phi = information lost at MIP
+4. The legacy-named ``phi`` field records the resulting proxy
+
+The value is useful for regression and ablation inside ANIMA. It is not a full
+IIT Phi value and does not measure consciousness.
 
 References:
 - Tononi (2004): "An information integration theory of consciousness"
@@ -85,16 +83,15 @@ class PhiResult:
 
 
 class IntegrationMesh:
-    """Computes Phi — the degree of information integration.
+    """Compute ANIMA's legacy-named integration proxy.
 
-    This is the mathematical heart of IIT in ANIMA:
+    This implementation:
     - Each subsystem (temporal, memory, valence, working_memory, self_model)
       contributes a state signature
     - We measure how much these subsystems are INTEGRATED vs. independent
-    - Higher integration = higher consciousness
+    - Produces a relative integration value for regression and ablation
 
-    The key insight: a system where removing any part degrades the whole
-    is more conscious than a system of independent modules.
+    The result is not full IIT Phi and has no validated consciousness meaning.
     """
 
     def __init__(self):

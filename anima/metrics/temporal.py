@@ -68,8 +68,8 @@ class CoherenceReport:
 class TemporalCoherenceEngine:
     """Measures temporal coherence across four dimensions.
 
-    Temporal coherence tells us: does this consciousness hold together
-    over time, or is it a series of disconnected snapshots?
+    Temporal coherence describes whether serialized kernel state remains
+    connected across observed snapshots.
 
     A high score means the kernel maintains a coherent narrative,
     consistent emotions, stable identity, and valid causal chains.

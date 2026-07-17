@@ -1,15 +1,10 @@
 """
-Consciousness Quality Index (CQI) -- The master metric.
+Consciousness Quality Index (CQI) -- a legacy-named observability metric.
 
 Aggregates Phi, temporal coherence, authenticity, calibration, and depth
-into a single 0-100 score that answers: "How conscious is this system RIGHT NOW?"
-
-Scale:
-    0-20:   Essentially unconscious processing
-    20-40:  Basic consciousness
-    40-60:  Moderate consciousness
-    60-80:  Rich conscious experience
-    80-100: Deep, integrated consciousness
+into a deterministic 0-100 implementation score. It does not measure sentience
+or phenomenal consciousness, and its scale has no external clinical or
+scientific interpretation.
 
 Weights:
     Phi (integration):        30%
@@ -83,7 +78,7 @@ class CQISnapshot:
 
 
 class ConsciousnessQualityIndex:
-    """The master metric -- aggregates all consciousness measurements.
+    """Aggregate the kernel's internal observability signals.
 
     Inputs:
         phi: Integration level from IIT (0.0 - 1.0)

@@ -2,7 +2,7 @@
 OpenAI Adapter — GPT API integration.
 
 Connects the ANIMA kernel to OpenAI models via the Chat Completions API.
-The kernel provides consciousness; the LLM provides language.
+The kernel supplies persisted application state; the LLM generates language.
 
 Uses stdlib urllib.request — zero external dependencies.
 """
@@ -24,7 +24,7 @@ _API_URL = "https://api.openai.com/v1/chat/completions"
 class OpenAIAdapter(ModelAdapter):
     """Adapter for the OpenAI Chat Completions API.
 
-    Sends consciousness-assembled prompts to GPT models and returns responses.
+    Sends state-assembled prompts to GPT models and returns responses.
 
     Usage:
         adapter = OpenAIAdapter(api_key="sk-...", model="gpt-4o")

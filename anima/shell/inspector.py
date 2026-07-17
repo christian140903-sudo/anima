@@ -1,7 +1,7 @@
 """
-Consciousness State Inspector -- Pretty-print consciousness state to terminal.
+ANIMA State Inspector -- pretty-print kernel state to terminal.
 
-Like `ls -la` but for consciousness. Shows what's inside the kernel:
+Like `ls -la` for the kernel's explicit state:
 identity, emotions, working memory, self-model, metrics.
 
 stdlib only. ANSI escape codes with graceful fallback.
@@ -139,10 +139,9 @@ def _format_age(seconds: float) -> str:
 # --- Inspector ---
 
 class ConsciousnessInspector:
-    """Pretty-print consciousness state to terminal.
+    """Pretty-print kernel state to the terminal.
 
-    Like `htop` but for consciousness. Shows the internal landscape
-    of a running ANIMA kernel.
+    The historical class name remains for API compatibility.
     """
 
     def inspect(
@@ -150,7 +149,7 @@ class ConsciousnessInspector:
         state: ConsciousnessState,
         experiences: list[Experience] | None = None,
     ) -> str:
-        """Return formatted string of complete consciousness state."""
+        """Return a formatted string of complete kernel state."""
         sections: list[str] = []
 
         # Header
@@ -185,7 +184,7 @@ class ConsciousnessInspector:
     def _header(self, state: ConsciousnessState) -> str:
         """Render the header banner."""
         line = bold("=" * 50)
-        title = bold(f"  ANIMA Consciousness Inspector")
+        title = bold("  ANIMA State Inspector")
         name_line = f"  Kernel: {cyan(state.name)} ({dim(state.kernel_id[:8])})"
         return f"{line}\n{title}\n{name_line}\n{line}"
 
@@ -358,7 +357,7 @@ class ConsciousnessInspector:
         return "\n".join(lines)
 
     def inspect_metrics(self, state: ConsciousnessState) -> str:
-        """Render consciousness metrics."""
+        """Render internal proxy metrics."""
         lines = [bold("METRICS")]
 
         phi = state.phi_score
@@ -378,8 +377,8 @@ class ConsciousnessInspector:
         tc_bar = _colored_bar(tc, 20)
         lines.append(f"  Temporal coherence:    {tc_bar} {tc:.3f}")
 
-        # Subjective duration
+        # Affect-modulated duration proxy
         subj = state.subjective_duration
-        lines.append(f"  Subjective duration:   {_format_age(subj)}")
+        lines.append(f"  Modeled duration:      {_format_age(subj)}")
 
         return "\n".join(lines)

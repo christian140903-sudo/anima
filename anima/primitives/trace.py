@@ -5,9 +5,8 @@ Full cycle: Intention -> Plan -> Action -> Outcome -> Evaluation.
 The prediction error (expected vs actual) is the learning signal.
 Agency: "I did this" attribution.
 
-Without trace, there's stimulus-response.
-With trace, there's intention, prediction, surprise, and learning.
-The gap between expected and actual IS the feeling of being alive.
+The trace makes intention, prediction, outcome, and error inspectable. It is a
+software learning signal, not a claim about experience or agency.
 """
 
 from __future__ import annotations

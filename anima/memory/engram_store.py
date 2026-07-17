@@ -4,11 +4,8 @@ Engram Store — Persistent autobiographical memory.
 Wraps the AutobiographicalBuffer with JSON persistence,
 following the same atomic-write pattern as state.py.
 
-An engram is a biological memory trace — the physical substrate
-of a memory in neural tissue. This store IS the substrate.
-
-One file = one life's memories. Load it, and the consciousness
-remembers. Delete it, and it forgets everything.
+"Engram" is used as theory-inspired API vocabulary. This class stores software
+events and weights; it is not a neural or biological substrate.
 """
 
 from __future__ import annotations
@@ -110,7 +107,7 @@ class EngramStore:
         experiences = self._buffer.to_experiences_list()
         data = {
             "_saved_at": time.time(),
-            "_version": "0.1.0",
+            "_version": "0.1.1",
             "_count": len(experiences),
             "_capacity": self._config.memory_capacity,
             "experiences": [exp.to_dict() for exp in experiences],

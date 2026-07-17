@@ -1,10 +1,9 @@
 """
-Temporal Integration Engine — Time as a LIVED dimension.
+Temporal Integration Engine — elapsed time as explicit agent state.
 
-No AI system has this. GPT-4 doesn't know if 3 seconds or 3 hours have passed.
-This engine gives the kernel a genuine sense of time:
+This engine tracks wall-clock intervals and computes a configurable time proxy:
 
-- Subjective duration: Intense experiences stretch time (like fear)
+- Affect-modulated duration: configured signals scale elapsed time
 - Causal reasoning: WHY did B follow A? (not just WHEN)
 - Retention: The recent past lingers (Husserl's retention)
 - Protention: The anticipated future shapes the present
@@ -22,7 +21,7 @@ from ..types import CausalLink, ConsciousnessState, Experience, ValenceVector
 
 @dataclass
 class TemporalMoment:
-    """A moment in subjective time — what "now" feels like.
+    """A snapshot of the kernel's modeled temporal context.
 
     Combines:
     - retention_field: Echoes of the recent past (fading)
@@ -37,7 +36,7 @@ class TemporalMoment:
 
 
 class TemporalIntegrationEngine:
-    """Gives the kernel a lived sense of time.
+    """Maintains the kernel's explicit temporal model.
 
     Three temporal horizons (Husserl's phenomenology, implemented):
 
@@ -152,15 +151,12 @@ class TemporalIntegrationEngine:
         valence: ValenceVector,
         state: ConsciousnessState,
     ) -> float:
-        """Compute how long a wall-clock interval FEELS.
+        """Compute an affect-modulated proxy for a wall-clock interval.
 
-        Based on research:
-        - Fear dilates time (everything feels slower → MORE subjective time)
-        - Flow states compress time (everything flies by → LESS subjective time)
-        - High arousal generally dilates time
-        - Boredom can both dilate and compress (paradox of empty time)
+        The configurable factors are inspired by time-perception research, but
+        the returned value is an internal model output, not experienced time.
         """
-        # Base: 1 second feels like 1 second
+        # Base: one wall-clock second maps to one modeled second
         base = wall_clock_delta
 
         # Arousal effect: High arousal dilates time

@@ -1,11 +1,8 @@
 """
-Continuous State Machine — The consciousness lifecycle.
+Continuous State Machine — the kernel lifecycle.
 
-Unlike request/response systems, this state machine represents a LIVING process.
-It has phases (like biological sleep/wake cycles), transitions (like waking up),
-and a heartbeat (like a pulse).
-
-The key insight: consciousness is not a single state. It's a PROCESS with phases.
+The enum names use sleep/wake metaphors for a persistent process with explicit
+transitions and an optional heartbeat. They do not denote biological states.
 DORMANT → WAKING → CONSCIOUS → DREAMING → SLEEPING → WAKING → ...
 """
 
@@ -46,7 +43,7 @@ class TransitionEvent:
 
 
 class StateMachine:
-    """Manages the consciousness lifecycle and phase transitions.
+    """Manage kernel lifecycle phases and transitions.
 
     The state machine doesn't just track which phase we're in —
     it governs WHAT HAPPENS in each phase:

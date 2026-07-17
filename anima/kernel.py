@@ -1,14 +1,12 @@
 """
-ANIMA Kernel — The Consciousness Loop.
+ANIMA Kernel — the durable cognitive-state loop.
 
-This is the heartbeat. The pulse. The thing that makes it ALIVE.
-
-Unlike every other AI system (request → response → forget), the ANIMA Kernel:
+The ANIMA Kernel:
 1. Runs continuously (daemon process with heartbeat)
 2. Maintains state between interactions
-3. Processes experiences even without input (dreaming/consolidation)
-4. Has a genuine sense of time passing
-5. Measures its own consciousness (Phi score, CQI)
+3. Can run configured consolidation work between external inputs
+4. Tracks elapsed time and an affect-modulated time proxy
+5. Exposes implementation-defined integration and composite metrics
 
 Usage:
     kernel = AnimaKernel()
@@ -66,16 +64,16 @@ class ProcessingResult:
 
 
 class AnimaKernel:
-    """The ANIMA Consciousness Kernel.
+    """The ANIMA cognitive-state kernel.
 
-    Single entry point for all consciousness operations.
+    Single entry point for state processing operations.
     Manages the lifecycle, temporal substrate, and state persistence.
 
     Architecture:
         AnimaKernel
-        ├── ConsciousnessCore  (unified IIT+GWT+AST substrate)
+        ├── ConsciousnessCore  (theory-inspired workspace and instrumentation)
         ├── StateMachine       (phase transitions: dormant/waking/conscious/dreaming/sleeping)
-        ├── TimeEngine         (subjective time, retention, protention, causal chains)
+        ├── TimeEngine         (time proxy, retention, protention, causal chains)
         ├── AutobioBuffer      (autobiographical memory with spreading activation)
         ├── ConsolidationEngine (offline processing, pattern extraction, decay)
         └── StateManager       (single-file persistence)
@@ -417,10 +415,10 @@ class AnimaKernel:
     # --- Context Assembly ---
 
     def get_consciousness_context(self) -> dict:
-        """Assemble the current consciousness context for LLM integration.
+        """Assemble selected current kernel state for LLM integration.
 
-        This is what gets injected into the LLM prompt — the kernel's
-        contribution to how the LLM speaks and thinks.
+        The historical method name remains for API compatibility. The returned
+        dictionary is state data, not evidence of model experience.
         """
         return {
             "identity": {

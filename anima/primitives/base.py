@@ -1,9 +1,9 @@
 """
-Base class for all consciousness primitives.
+Base class for ANIMA's processing primitives.
 
 Every primitive is ablation-capable: disable it and measure
-what the consciousness LOSES. If nothing changes, the primitive
-was dead weight. If something breaks, it was load-bearing.
+which internal outputs change. The effect is an implementation result, not an
+inference about consciousness.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ class PrimitiveResult:
 
 
 class Primitive(ABC):
-    """Abstract base for the 8 consciousness primitives.
+    """Abstract base for the eight processing primitives.
 
     Each primitive:
     - Has a clear process() method

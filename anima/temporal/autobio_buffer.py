@@ -1,13 +1,13 @@
 """
-Autobiographical Buffer — Lived experience, not conversation history.
+Autobiographical Buffer — associative event memory, not a vector database.
 
 This is NOT a vector database. This is NOT RAG.
-This is a biological memory system:
+This is a biologically inspired software model:
 - Experiences are encoded with emotional weight
 - Retrieval uses SPREADING ACTIVATION (not similarity search)
 - Memories DECAY over time (Ebbinghaus curve)
 - Recall RECONSTRUCTS (not retrieves) — memories change when accessed
-- False memories are a FEATURE (reconstruction-based, like biological memory)
+- Recall can modify stored weights through a reconsolidation heuristic
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from ..types import Experience, KernelConfig, ValenceVector
 
 
 class AutobiographicalBuffer:
-    """The kernel's autobiographical memory — lived experience.
+    """The kernel's associative autobiographical-event memory.
 
     Key differences from typical AI memory:
     1. Emotional encoding: Intense experiences are remembered more strongly

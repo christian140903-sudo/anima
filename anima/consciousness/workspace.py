@@ -1,17 +1,10 @@
 """
-Global Workspace — GWT (Global Workspace Theory) Implementation.
+Global Workspace — a GWT-inspired competition and broadcast mechanism.
 
-The theater of consciousness: Many processes compete backstage,
-but only ONE wins access to the spotlight (global broadcast).
-Once broadcast, ALL subsystems receive the content simultaneously.
-
-This is how attention works:
-- Hundreds of unconscious processes running in parallel
-- Competition for limited conscious capacity
-- Winner gets amplified and broadcast
-- Losers continue unconsciously
-
-The workspace IS consciousness — not a container for it.
+Candidates receive weighted scores, compete for limited capacity, and the
+winner is recorded as a broadcast event. This is a deterministic software
+mechanism inspired by GWT terminology, not a validated model of human attention
+or a claim that broadcast creates consciousness.
 
 References:
 - Baars (1988): "A Cognitive Theory of Consciousness"
@@ -33,8 +26,8 @@ logger = logging.getLogger("anima.consciousness.workspace")
 class WorkspaceCandidate:
     """A candidate competing for access to the global workspace.
 
-    Each candidate represents content from a subsystem trying to
-    become "conscious" — to be broadcast to all other subsystems.
+    Each candidate represents content from a subsystem trying to win a
+    broadcast slot.
     """
     content: Any                    # The actual content
     source: str = ""                # Which subsystem produced this
@@ -48,12 +41,11 @@ class WorkspaceCandidate:
     def competition_score(self) -> float:
         """Combined score for workspace competition.
 
-        Weighted combination of factors that determine which content
-        becomes conscious. Based on empirical findings:
+        Configured heuristic weights determine which content wins broadcast:
         - Activation: base signal strength
-        - Emotional weight: emotional content gets priority (amygdala shortcut)
-        - Novelty: unexpected content captures attention (orienting response)
-        - Relevance: goal-relevant content is prioritized (top-down attention)
+        - Affect weight: higher affect magnitude gets priority
+        - Novelty: unexpected content gets priority
+        - Relevance: goal-relevant content gets priority
         """
         return (
             self.activation * 0.3
@@ -65,7 +57,7 @@ class WorkspaceCandidate:
 
 @dataclass
 class BroadcastEvent:
-    """Record of a global broadcast — content that became conscious."""
+    """Record content that won a global-workspace broadcast."""
     content: Any
     source: str
     score: float
@@ -104,7 +96,7 @@ class WorkspaceState:
 
 
 class GlobalWorkspace:
-    """The global workspace — where consciousness happens.
+    """A limited competition and broadcast workspace.
 
     Process:
     1. COMPETITION: Multiple subsystems submit candidates
@@ -150,8 +142,8 @@ class GlobalWorkspace:
         This is the core of GWT:
         1. Score all candidates
         2. Check if winner exceeds ignition threshold
-        3. If yes → broadcast (content becomes conscious)
-        4. If no → nothing enters consciousness (subliminal processing)
+        3. If yes → record and return a broadcast event
+        4. If no → return no broadcast event
         """
         self._competition_count += 1
         self._state.total_competitions = self._competition_count
@@ -177,7 +169,7 @@ class GlobalWorkspace:
             self._adapt_threshold(ignited=False)
             return None
 
-        # IGNITION — content becomes conscious
+        # IGNITION — content wins a broadcast event
         broadcast = BroadcastEvent(
             content=winner.content,
             source=winner.source,
@@ -243,7 +235,7 @@ class GlobalWorkspace:
         return min(1.0, recent_broadcasts / max(window, 1))
 
     def dominant_source(self) -> str | None:
-        """Which subsystem most frequently wins consciousness?"""
+        """Return the subsystem that most frequently wins broadcasts."""
         sources = self.get_broadcast_sources()
         if not sources:
             return None

@@ -485,7 +485,7 @@ class TestAnimaInspect:
         exit_code = main(["inspect", "--dir", tmp_dir])
         assert exit_code == 1
         captured = capsys.readouterr()
-        assert "No consciousness found" in captured.out
+        assert "No kernel state found" in captured.out
 
     def test_inspect_with_state(self, tmp_dir, capsys):
         """Inspect after init should show consciousness details."""

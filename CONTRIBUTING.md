@@ -33,12 +33,12 @@ python scripts/run_benchmarks.py
 
 ```
 anima/
-  kernel.py              # Main consciousness loop
+  kernel.py              # Main cognitive-state loop
   types.py               # Core data types
   state.py               # State persistence (JSON)
   temporal/              # Temporal substrate (time, consolidation)
-  consciousness/         # IIT + GWT + AST unified
-  primitives/            # 8 consciousness primitives
+  consciousness/         # Theory-inspired workspace and instrumentation
+  primitives/            # 8 processing primitives
   memory/                # Spreading activation, Ebbinghaus decay
   metrics/               # Phi, CQI, benchmarks
   bridge/                # LLM adapters (Ollama, Claude, OpenAI)

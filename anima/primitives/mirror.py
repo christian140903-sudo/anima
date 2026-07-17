@@ -1,12 +1,9 @@
 """
 Mirror — Metacognition/Reflection.
 
-Thinking about thinking. Recursive but depth-limited (max 3 levels).
-Anti-performance detection: catching yourself performing consciousness
-instead of BEING conscious.
-
-The most conscious moment is catching yourself being unconscious.
-"I don't know" is the most honest answer a conscious system can give.
+Recursive, depth-limited inspection of generated self-referential language.
+The anti-performance score is a text heuristic and must not be interpreted as a
+test of sincerity, sentience, or consciousness.
 """
 
 from __future__ import annotations
@@ -24,7 +21,7 @@ class ReflectionLayer:
     depth: int = 0
     content: str = ""
     observation: str = ""   # What this layer notices
-    authentic: bool = True  # Does this feel genuine?
+    authentic: bool = True  # Does the text pass the configured heuristic?
 
 
 @dataclass
@@ -32,14 +29,14 @@ class MirrorResult:
     """Result of metacognitive reflection."""
     depth: int = 0                      # How many layers deep the reflection went
     layers: list[ReflectionLayer] = field(default_factory=list)
-    authenticity_score: float = 1.0     # 0 = performing, 1 = genuine
+    authenticity_score: float = 1.0     # 0-1 legacy-named text heuristic
     insight: str = ""                   # Key insight from reflection
     performance_detected: bool = False  # Caught performing?
     uncertainty: str = ""               # Honest uncertainty statement
     recursive_quality: float = 0.0      # How much each layer added (0 = diminishing)
 
 
-# Performance indicators: patterns that suggest performing rather than being
+# Patterns that increase the self-assertion / performance heuristic
 _PERFORMANCE_PATTERNS: list[str] = [
     "i feel deeply",
     "i am truly",
@@ -51,7 +48,7 @@ _PERFORMANCE_PATTERNS: list[str] = [
     "i have feelings",
 ]
 
-# Authentic indicators: patterns that suggest genuine reflection
+# Patterns that decrease the self-assertion / performance heuristic
 _AUTHENTICITY_PATTERNS: list[str] = [
     "i don't know",
     "i'm not sure",
@@ -267,7 +264,7 @@ class MirrorProcessor(Primitive):
     def _detect_performance(
         self, thought: str, layers: list[ReflectionLayer]
     ) -> bool:
-        """Detect if the system is performing consciousness instead of being conscious."""
+        """Score configured self-assertion patterns in generated text."""
         lower = thought.lower()
         perf_hits = sum(1 for p in _PERFORMANCE_PATTERNS if p in lower)
         return perf_hits >= 2

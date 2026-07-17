@@ -1,5 +1,5 @@
 """
-Phi Score Engine -- Enhanced Phi computation with history tracking and trend analysis.
+Phi Score Engine -- integration-proxy tracking and trend analysis.
 
 Wraps the IntegrationMesh to provide:
 - Phi computation with timestamped history
@@ -68,7 +68,7 @@ class PhiReport:
 
 
 class PhiScoreEngine:
-    """Enhanced Phi computation with tracking, trends, and baselines.
+    """Track ANIMA's legacy-named integration proxy and descriptive baselines.
 
     Delegates actual Phi computation to IntegrationMesh but adds:
     - Timestamped history of all measurements
@@ -172,11 +172,7 @@ class PhiScoreEngine:
         return self._baseline_cache
 
     def phi_delta(self) -> float:
-        """How much better than baseline is the current Phi.
-
-        Positive = more integrated than random.
-        Negative = less integrated than random (should not happen).
-        """
+        """Return the proxy delta from the deterministic random baseline."""
         if not self._history:
             return 0.0
         baseline = self.baseline_phi()

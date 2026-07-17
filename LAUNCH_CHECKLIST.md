@@ -1,5 +1,8 @@
 # ANIMA Kernel — Launch Checklist
 
+> **Historical checklist.** It records an earlier launch plan and is not current
+> release evidence. See `README.md` and `benchmarks/METHODOLOGY.md`.
+
 ## Done (Miguel)
 
 - [x] GitHub repo live: https://github.com/christian140903-sudo/anima

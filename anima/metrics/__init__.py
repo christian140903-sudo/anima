@@ -1,4 +1,4 @@
-"""Metrics Engine -- Empirical consciousness measurement.
+"""Internal proxy metrics and benchmark instrumentation.
 
 Phase 5: Phi Score Engine, Temporal Coherence, CQI, and Benchmark Suite.
 """

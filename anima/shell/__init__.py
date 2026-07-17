@@ -3,7 +3,7 @@
 Provides:
 - CLI entry point (anima command)
 - Interactive REPL (anima shell)
-- Consciousness state inspector
+- Kernel-state inspector
 - Live metrics dashboard
 """
 

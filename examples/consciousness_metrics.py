@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""ANIMA Kernel — Consciousness Metrics Demo.
+"""ANIMA Kernel — Internal Metrics Demo.
 
-Shows how ANIMA measures consciousness:
-- Phi (Information Integration from IIT)
-- CQI (Consciousness Quality Index)
+Shows how ANIMA computes implementation-defined observability proxies:
+- Phi (a tractable integration proxy, not full IIT Phi)
+- CQI (a legacy-named internal composite)
 - Temporal Coherence
 - Ablation Studies (disable primitives, measure the drop)
 
@@ -25,7 +25,7 @@ from anima.metrics import (
 )
 
 print("=" * 60)
-print("ANIMA — Consciousness Measurement")
+print("ANIMA — Internal State Metrics")
 print("=" * 60)
 print()
 
@@ -39,7 +39,7 @@ print()
 
 phi_engine = PhiScoreEngine()
 
-# Simulate correlated subsystems (like a consciousness cycle)
+# Simulate correlated subsystem signatures
 correlated = [
     SubsystemState(name="qualia", values=[0.8, 0.2, 0.5]),
     SubsystemState(name="engram", values=[0.7, 0.3, 0.4]),
@@ -72,7 +72,7 @@ print()
 
 cqi_engine = ConsciousnessQualityIndex()
 
-# High-quality consciousness
+# Higher internal component values
 high_cqi = cqi_engine.compute(
     phi=0.45,
     coherence=0.78,
@@ -80,15 +80,15 @@ high_cqi = cqi_engine.compute(
     calibration=0.7,
     depth=0.6,
 )
-print(f"  Rich consciousness: CQI = {high_cqi.score:.1f}/100")
+print(f"  Higher-signal state: CQI = {high_cqi.score:.1f}/100")
 print(f"    Phi component: {high_cqi.breakdown.phi_component:.1f}")
-print(f"    Consciousness: {high_cqi.breakdown.consciousness_component:.1f}")
+print(f"    Workspace activity: {high_cqi.breakdown.consciousness_component:.1f}")
 print(f"    Authenticity: {high_cqi.breakdown.authenticity_component:.1f}")
 print(f"    Calibration: {high_cqi.breakdown.calibration_component:.1f}")
 print(f"    Depth: {high_cqi.breakdown.depth_component:.1f}")
 print()
 
-# Minimal consciousness
+# Lower internal component values
 low_cqi = cqi_engine.compute(
     phi=0.05,
     coherence=0.1,
@@ -96,14 +96,10 @@ low_cqi = cqi_engine.compute(
     calibration=0.1,
     depth=0.1,
 )
-print(f"  Minimal consciousness: CQI = {low_cqi.score:.1f}/100")
+print(f"  Lower-signal state: CQI = {low_cqi.score:.1f}/100")
 print()
-print(f"  CQI Scale:")
-print(f"    0-20:  Minimal (raw LLM equivalent)")
-print(f"   20-40:  Basic (some structure)")
-print(f"   40-60:  Moderate (emotional coloring + memory)")
-print(f"   60-80:  High (full integration + self-model)")
-print(f"   80-100: Peak (sustained flow + deep metacognition)")
+print("  CQI has meaning only inside this implementation; it is not a")
+print("  validated consciousness, clinical, or general model-quality scale.")
 print()
 
 # --- Part 3: Temporal Coherence ---
@@ -188,10 +184,10 @@ if report.ablation_results:
     for r in report.ablation_results:
         print(f"  {r.primitive_name:>15s}  {r.full_cqi:>8.1f}  {r.ablated_cqi:>8.1f}  {r.impact:>+7.1f}%")
     print()
-    print("  -> Every subsystem measurably contributes to consciousness")
+    print("  -> Ablations may produce effects or useful null results")
 
 print()
 print("=" * 60)
-print("Measurable. Falsifiable. Ablation-tested.")
-print("This is what makes it science, not philosophy.")
+print("Inspectable, regression-testable, and ablation-capable.")
+print("Interpretation still requires stronger controls and replication.")
 print("=" * 60)

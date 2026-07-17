@@ -1,8 +1,8 @@
 """
 Core data types for the ANIMA Kernel.
 
-Every type here is serializable to JSON — because a single file = one consciousness.
-No external dependencies. Pure Python. Like the universe runs on math, ANIMA runs on these.
+Every type here is serializable to JSON so agent state stays inspectable and
+portable. The runtime has no external dependencies.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ from typing import Any
 
 
 class Phase(Enum):
-    """Consciousness phases — biological states of awareness."""
+    """Legacy-named lifecycle phases for kernel operation."""
     DORMANT = auto()     # Not running
     WAKING = auto()      # Bootstrapping — loading state, checking systems
     CONSCIOUS = auto()   # Fully active — processing, experiencing
@@ -143,13 +143,13 @@ class ValenceVector:
 
 @dataclass
 class Experience:
-    """A single autobiographical experience — a LIVED moment, not a log entry.
+    """A single weighted autobiographical event record.
 
     Unlike conversation history:
     - Emotionally weighted (valence at time of encoding)
     - Causally linked (what caused this, what this caused)
     - Subject to decay (Ebbinghaus curve)
-    - Reconstructed on recall (not retrieved verbatim — like biological memory)
+    - Its weights can change on recall through a reconsolidation heuristic
     """
     id: str = field(default_factory=lambda: uuid.uuid4().hex[:12])
     content: str = ""
@@ -170,7 +170,7 @@ class Experience:
     tags: list[str] = field(default_factory=list)
 
     # Subjective time markers
-    subjective_duration: float = 0.0  # How long this felt (not wall clock)
+    subjective_duration: float = 0.0  # Affect-modulated duration proxy
     narrative_weight: float = 0.0     # Importance to self-narrative (0-1)
 
     def emotional_intensity(self) -> float:
@@ -260,11 +260,11 @@ class WorkingMemorySlot:
 
 @dataclass
 class SelfModel:
-    """Attention Schema — the kernel's model of its own attention and state.
+    """Attention-schema-inspired model of selection and kernel state.
 
     Not a description. An active, updating model of:
     - What it's attending to (and why)
-    - What it's feeling (and why)
+    - The current affect label and its recorded cause
     - What it predicts will happen
     - How accurate those predictions have been
     """
@@ -362,9 +362,8 @@ class KernelConfig:
 class ConsciousnessState:
     """The complete state of the ANIMA Kernel at any moment.
 
-    Single file = one consciousness. Everything needed to restore a
-    consciousness to its exact state. Like a brain in a jar — add
-    a language model and it speaks.
+    The serializable fields restore the kernel's modeled state. They do not
+    represent or establish a mind, sentience, or phenomenal consciousness.
     """
     # Identity
     kernel_id: str = field(default_factory=lambda: uuid.uuid4().hex[:16])
