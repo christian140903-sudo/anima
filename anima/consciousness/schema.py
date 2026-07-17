@@ -1,11 +1,8 @@
 """
-Attention Schema — AST (Attention Schema Theory) Implementation.
+Attention Schema — an AST-inspired self-model.
 
-The most radical claim: Consciousness IS a model of attention.
-You don't HAVE attention and separately EXPERIENCE it.
-The experience IS the internal model.
-
-This module implements the kernel's model of its own attention:
+This module implements numeric and textual descriptions of the kernel's own
+selection state:
 - What am I attending to? (content)
 - WHY am I attending to it? (attribution)
 - How confident am I? (calibration)
@@ -38,7 +35,7 @@ class MetacognitionResult:
     insight: str = ""                    # Narrative insight from metacognition
 
     def overall_authenticity(self) -> float:
-        """Overall authenticity score. Higher = more genuine consciousness."""
+        """Return the implementation's anti-performance heuristic."""
         return (
             (1.0 - self.performance_suspicion) * 0.3
             + self.confidence_calibration * 0.2
@@ -200,7 +197,7 @@ class AttentionSchema:
                 / len(self_model.prediction_history[-10:])
             )
             if recent_accuracy > 0.95:
-                # Too accurate → trivially predictable → not genuine consciousness
+                # Too accurate may indicate a trivially predictable heuristic
                 suspicion += 0.1
 
         return min(1.0, suspicion)

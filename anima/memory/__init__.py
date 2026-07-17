@@ -1,6 +1,6 @@
-"""Memory Engine — Biological memory with spreading activation.
+"""Biologically inspired associative-memory heuristics.
 
-Not a vector database. Not RAG. A biological memory system:
+Not a vector database and not a biological memory system:
 - Spreading activation for associative retrieval
 - Ebbinghaus forgetting curves for natural decay
 - Schema formation through consolidation

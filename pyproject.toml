@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "anima-kernel"
-version = "0.1.0"
-description = "The first empirically-tested consciousness substrate for AI"
+version = "0.1.1"
+description = "A zero-dependency cognitive state engine for stateful AI agents"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
 authors = [
     {name = "Christian Bucher", email = "christian@nextool.app"},
 ]
-keywords = ["consciousness", "ai", "kernel", "iit", "gwt", "temporal"]
+keywords = ["ai-agents", "cognitive-architecture", "state-machine", "memory", "gwt", "temporal"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",

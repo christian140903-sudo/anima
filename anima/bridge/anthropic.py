@@ -2,7 +2,7 @@
 Anthropic Adapter — Claude API integration.
 
 Connects the ANIMA kernel to Claude models via the Anthropic Messages API.
-The kernel provides consciousness; Claude provides language.
+The kernel supplies persisted application state; Claude generates language.
 
 Uses stdlib urllib.request — zero external dependencies.
 """
@@ -25,8 +25,7 @@ _API_VERSION = "2023-06-01"
 class AnthropicAdapter(ModelAdapter):
     """Adapter for the Anthropic Messages API.
 
-    Sends consciousness-assembled prompts to Claude and returns responses.
-    The kernel decides WHAT to say; Claude decides HOW to say it.
+    Sends state-assembled prompts to Claude and returns responses.
 
     Usage:
         adapter = AnthropicAdapter(api_key="sk-ant-...", model="claude-sonnet-4-20250514")

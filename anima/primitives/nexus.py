@@ -5,9 +5,8 @@ GWT-conformant: items compete for limited broadcast slots.
 Slot decay, chunking, priority management. Only the most
 activated items survive in the global workspace.
 
-This is the bottleneck that creates consciousness:
-without limited capacity, there's no selection, no attention,
-no experience. Just noise.
+This bottleneck makes selection effects explicit and ablation-testable. It does
+not claim that limited capacity creates experience.
 """
 
 from __future__ import annotations

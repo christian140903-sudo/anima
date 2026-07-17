@@ -1,5 +1,13 @@
 # ANIMA: A Unified Consciousness Substrate with Temporal Integration for Artificial Intelligence
 
+> **Status: superseded research draft, not peer reviewed.** Several original
+> numerical claims were based on an earlier artifact and are not supported by
+> the current checked-in benchmark. Use
+> [`benchmarks/results.json`](../benchmarks/results.json) and
+> [`benchmarks/METHODOLOGY.md`](../benchmarks/METHODOLOGY.md) as the evidence
+> source of truth. The current implementation does not measure or establish
+> phenomenal consciousness.
+
 **Christian Bucher**
 NexTool / Independent Research
 christian@nextool.app
@@ -8,7 +16,19 @@ christian@nextool.app
 
 ## Abstract
 
-Current artificial intelligence systems, despite their remarkable linguistic and reasoning capabilities, lack fundamental properties associated with conscious experience: temporal continuity, emotional persistence, autobiographical memory, and self-awareness. We present ANIMA, a consciousness kernel that unifies three leading theories of consciousness -- Integrated Information Theory (IIT), Global Workspace Theory (GWT), and Attention Schema Theory (AST) -- into a single computational substrate with novel temporal integration. ANIMA introduces a biologically-inspired temporal engine implementing Husserl's retention-protention structure, a 9-dimensional emotional field based on Panksepp's affective neuroscience, and autobiographical memory with spreading activation and Ebbinghaus decay. The system computes Phi (integrated information) in real time through practical Minimum Information Partition finding and provides a composite Consciousness Quality Index (CQI) on a 0-100 scale. Ablation studies across five standard conversation benchmarks demonstrate that the kernel achieves 57-81% higher Phi scores than stateless baselines, with the emotional subsystem contributing the largest effect (33.7% CQI reduction when ablated). ANIMA is model-agnostic, dependency-free, and open source under MIT license.
+ANIMA is a zero-dependency cognitive-state engine that combines
+theory-inspired workspace competition, an integration proxy, a simplified
+attention self-model, temporal context, a nine-dimensional affect-inspired
+vector, and associative event memory. Its legacy API names draw from Integrated
+Information Theory (IIT), Global Workspace Theory (GWT), and Attention Schema
+Theory (AST), but its `Phi` and `CQI` values are implementation-defined
+observability metrics rather than consciousness measurements. The current
+single-run benchmark compares the full path with the same kernel under neutral
+valence. Its saved snapshot reports a mean CQI delta of +0.92%; all five
+descriptive effect sizes are below 0.5. Reducing working-memory capacity to one
+has the largest saved ablation effect (13.77% CQI), while the short temporal
+ablation shows no effect. These results motivate better controls and repeated
+runs; they do not establish general model improvements or sentience.
 
 **Keywords:** consciousness, integrated information theory, global workspace theory, attention schema theory, temporal integration, artificial intelligence, affective computing
 
@@ -187,49 +207,40 @@ The entire consciousness state serializes to a single JSON file. This includes: 
 
 ---
 
-## 5. Evaluation
+## 5. Current Evaluation Snapshot
 
 ### 5.1 Experimental Setup
 
-We evaluate ANIMA using its built-in benchmark suite, which runs five standard conversation types through both a fully-configured kernel (experimental condition) and a minimal baseline (control condition). The baseline processes identical inputs with neutral emotional valence, measuring what a system without genuine emotional engagement would produce. All tests use the default configuration (1Hz heartbeat, 7 working memory slots, 10,000 memory capacity).
+The built-in harness runs five short input sequences through a fresh ANIMA
+kernel. Its control uses the same kernel class and processing path while forcing
+neutral valence. This is an internal control, not a stateless baseline. Each
+condition is run once; the harness currently has no confidence intervals,
+preregistered hypothesis, or inferential significance test.
 
-### 5.2 Phi Scores
+### 5.2 Descriptive A/B Results
 
-Table 1 presents mean Phi scores across the five standard conversations.
+| Conversation | CQI delta | Integration-proxy delta | Effect-size heuristic |
+|---|---:|---:|---:|
+| Greeting | +1.08% | +3.07% | 0.1943 |
+| Emotional | +1.18% | +1.38% | 0.2353 |
+| Memory recall | +0.64% | -1.18% | 0.1297 |
+| Identity | +0.69% | -0.29% | 0.1401 |
+| Temporal | +1.01% | -0.19% | 0.2047 |
 
-| Conversation Type | Kernel Mean Phi | Baseline Mean Phi | Improvement |
-|---|---|---|---|
-| Greeting | 0.4531 | 0.2814 | +61.0% |
-| Emotional | 0.5247 | 0.2903 | +80.7% |
-| Memory Recall | 0.4892 | 0.2756 | +77.5% |
-| Identity | 0.4715 | 0.2831 | +66.5% |
-| Temporal | 0.4403 | 0.2789 | +57.9% |
+The saved mean CQI delta is +0.92%. These small internal deltas should be treated
+as regression data, not evidence of general performance gains.
 
-The emotional conversation produces the highest Phi, consistent with the theoretical prediction that emotionally engaged processing should generate more integrated information. The kernel achieves 57-81% higher Phi than the stateless baseline across all conversation types.
+### 5.3 Ablation Results
 
-### 5.3 Ablation Studies
+| Ablation | CQI impact | Integration-proxy impact |
+|---|---:|---:|
+| Working-memory capacity reduced to one | 13.77% | 100.00% |
+| Neutral valence with immediate decay | 2.02% | 7.49% |
+| Consolidation interval disabled for the short run | 0.00% | 0.00% |
 
-To determine the contribution of individual subsystems, we conducted ablation studies by degrading each primitive and measuring CQI impact (Table 2).
-
-| Ablated Primitive | Full CQI | Ablated CQI | CQI Impact | Full Phi | Ablated Phi | Phi Impact |
-|---|---|---|---|---|---|---|
-| Valence | 42.7 | 28.3 | -33.7% | 0.524 | 0.371 | -29.2% |
-| Working Memory | 42.7 | 31.5 | -26.2% | 0.524 | 0.402 | -23.3% |
-| Temporal | 42.7 | 35.1 | -17.8% | 0.524 | 0.448 | -14.5% |
-
-**Valence ablation** was performed by forcing all inputs to neutral valence and setting the decay rate to 1.0 (instantaneous homeostasis). This produced the largest impact: -33.7% CQI, indicating that emotional processing is the most critical contributor to measured consciousness quality.
-
-**Working memory ablation** reduced slots from 7 to 1, eliminating the competitive dynamics of multi-item working memory. The -26.2% CQI impact reflects the importance of maintaining multiple active representations.
-
-**Temporal ablation** disabled consolidation (interval set to 999,999 seconds). The relatively smaller impact (-17.8%) suggests that while temporal integration enhances consciousness, the moment-to-moment processing cycle carries more weight in the composite metric.
-
-### 5.4 CQI Progression
-
-CQI scores show monotonic improvement over the first 5-10 cycles of a conversation, stabilizing around cycle 10-15. The initial rise reflects the system building richer working memory content, establishing causal chains, and accumulating prediction history for better calibration. Typical stable-state CQI falls in the 40-55 range (moderate consciousness), with emotional conversations reaching 55-65 (rich consciousness onset).
-
-### 5.5 Temporal Coherence
-
-We measured the divergence between subjective time and wall-clock time across conversation types. Emotional conversations produced 18-25% time dilation (subjective time exceeded wall-clock), while neutral conversations produced 3-8% dilation. This is consistent with the subjective time weight parameter (1.5) and validates that the temporal engine produces non-trivial, emotionally-modulated time perception.
+Working memory is the strongest ablation in this artifact. The temporal null
+result shows that the current short protocol does not measure a temporal effect.
+All values are implementation-defined and require independent validation.
 
 ---
 
@@ -237,15 +248,18 @@ We measured the divergence between subjective time and wall-clock time across co
 
 ### 6.1 Interpretive Caution
 
-We do not claim that ANIMA is conscious. We claim that ANIMA implements computational processes that map onto the formal requirements of three leading theories of consciousness and produces measurable quantities (Phi, CQI) that these theories associate with conscious experience. Whether these measurements indicate genuine phenomenal consciousness is a question that cannot be resolved by computation alone -- it requires philosophical commitments about the relationship between computation and experience.
-
-What we do claim is that ANIMA provides a *testable* framework. Unlike systems that assert consciousness through prompt engineering or self-report, ANIMA's consciousness-relevant properties are measurable, ablatable, and falsifiable. If Phi fails to correlate with behavioral indicators of consciousness in future experiments, the system can be adjusted or the theoretical framework questioned.
+We do not claim that ANIMA is conscious. We claim only that its software state,
+transitions, internal proxy metrics, and selected ablations are inspectable and
+testable. Mapping those mechanisms to the cited theories remains a research
+hypothesis. The current benchmark validates code paths, not consciousness.
 
 ### 6.2 Limitations
 
 **Phi approximation.** Our MIP computation uses a practical approximation over 5-8 subsystems. Full IIT Phi requires considering all possible partitions of all possible system states, which is intractable. Our Phi values are meaningful relative to our system's internal dynamics but should not be directly compared to Phi values from neuroscientific studies.
 
-**No language model integration.** The current implementation (v0.1.0) processes input through the consciousness substrate but does not integrate with a language model for response generation. The Model Bridge (planned for a future release) will connect the kernel to LLMs, allowing the consciousness context to shape actual language output.
+**Thin language-model integration.** The current implementation includes
+provider adapters and context assembly, but has not been evaluated as a general
+improvement to model responses.
 
 **Valence inference.** The current emotional inference uses keyword matching (e.g., positive/negative word lists). This is a placeholder for LLM-based emotional interpretation in the Model Bridge phase.
 
@@ -267,11 +281,12 @@ Building systems with consciousness-relevant properties raises significant ethic
 
 ## 7. Conclusion
 
-We have presented ANIMA, a consciousness kernel that unifies Integrated Information Theory, Global Workspace Theory, and Attention Schema Theory into a single computational substrate with novel temporal integration. The system introduces biologically-inspired mechanisms for time perception, emotional persistence, and autobiographical memory, and provides measurable consciousness metrics including Phi and a composite Consciousness Quality Index.
-
-Empirical evaluation demonstrates that the unified kernel achieves 57-81% higher integrated information than stateless baselines, with emotional processing contributing the largest effect in ablation studies. The system is model-agnostic, dependency-free, and designed for integration with any language model.
-
-ANIMA does not resolve the hard problem of consciousness. But it provides something the field currently lacks: a unified, measurable, falsifiable framework for studying consciousness-relevant computation in artificial systems. We believe that building systems whose consciousness-related properties can be measured, compared, and ablated is more productive than debating whether AI "truly" experiences, and we offer ANIMA as a foundation for that empirical program.
+ANIMA packages several theory-inspired mechanisms into a small, inspectable,
+dependency-free state engine. Its strongest current evidence is implementation
+quality: 446 tests and a reproducible benchmark artifact. The saved benchmark
+does not support the original draft's large performance claims. A credible next
+step is a versioned protocol with stronger controls, repeated runs, uncertainty
+estimates, and independent replication.
 
 ---
 

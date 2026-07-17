@@ -1,13 +1,13 @@
 """
 Engram — Memory Primitive.
 
-Biological memory model: Encode -> Consolidate -> Retrieve -> Reconsolidate.
+Biologically inspired sequence: encode -> consolidate -> retrieve -> reweight.
 Wraps the AutobiographicalBuffer interface but adds the primitive contract.
 
 Key features:
 - Ebbinghaus decay (memories fade)
 - Spreading activation (recall activates related memories)
-- False memory as feature (reconstruction modifies memories)
+- Recall reweighting as a configurable reconstruction heuristic
 - Emotional encoding (intense moments remembered more strongly)
 """
 

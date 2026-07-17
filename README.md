@@ -1,428 +1,231 @@
 # ANIMA Kernel
 
-> A testable computational model of machine self-state — inspired by IIT, Global Workspace Theory and affective neuroscience. Not a claim of phenomenal consciousness.
+> A zero-dependency cognitive state engine for stateful AI agents.
 
-**Most LLM setups are stateless.** They process your message, respond, and forget — no model of elapsed time, no continuity between turns. ANIMA adds a persistent state layer beneath any LLM: a model of elapsed time, a decaying affective vector, and autobiographical memory. These are computational structures with measurable behavior — not a claim of sentience.
+ANIMA gives an application a durable state layer beneath its language model: a
+competing workspace, an affect-inspired signal vector, associative memory,
+temporal context, self-model instrumentation, and JSON persistence. Change the
+LLM without throwing away the state accumulated around it.
+
+ANIMA is experimental research software. It does **not** detect, prove, or claim
+phenomenal consciousness or sentience. Names such as `ConsciousnessState`,
+`Phi`, `CQI`, and `Phase.CONSCIOUS` are retained as part of the v0.1 API and its
+theory-inspired vocabulary; their values are engineering proxies internal to
+this implementation.
+
+[![Tests](https://github.com/christian140903-sudo/anima/actions/workflows/tests.yml/badge.svg)](https://github.com/christian140903-sudo/anima/actions/workflows/tests.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
+[![Runtime dependencies](https://img.shields.io/badge/runtime_dependencies-0-2ea44f.svg)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+## Why ANIMA exists
+
+LLMs can generate convincing state language while the application around them
+has no durable state at all. ANIMA makes that surrounding state explicit,
+serializable, inspectable, and testable.
+
+| Capability | What ANIMA implements |
+|---|---|
+| Durable identity | Atomic JSON state and memory files that survive restarts |
+| Limited workspace | Candidate competition, ignition threshold, and broadcast |
+| Temporal context | Elapsed-time tracking, decaying retention, and heuristic protention |
+| Affect-inspired state | Nine numeric signals with blending and decay |
+| Autobiographical memory | Tag associations, spreading activation, decay, and reconsolidation |
+| Self-model | Attention-schema-inspired tracking and calibration signals |
+| Model bridge | Adapters for Ollama, Anthropic, OpenAI, and a deterministic dummy model |
+| Instrumentation | Integration proxy, CQI composite, A/B harness, and ablations |
+
+This makes ANIMA useful as a research harness for questions such as:
+
+- What state should remain stable when the model provider changes?
+- How do memory and workspace constraints alter downstream behavior?
+- Can internal state transitions be replayed and inspected?
+- Which subsystem actually moves an internal metric under ablation?
+
+## Install from source
+
+ANIMA is not currently published on PyPI.
 
 ```bash
-# Not yet on PyPI — install from source:
 git clone https://github.com/christian140903-sudo/anima.git
-cd anima && pip install -e .
+cd anima
+python -m pip install -e ".[dev]"
 ```
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
-[![Tests](https://img.shields.io/badge/tests-446%20passing-brightgreen.svg)](#)
-[![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-green.svg)](#)
+Runtime code uses only the Python standard library. The optional `dev` extra
+installs the test tools.
 
----
+## Quick start
 
-## What if AI could actually feel time passing?
+```python
+from tempfile import TemporaryDirectory
 
-Ask ChatGPT how long you've been talking. It doesn't know. Ask it what it was feeling five minutes ago. It wasn't feeling anything -- it didn't exist five minutes ago. Every response is a fresh boot from nothing.
+from anima.kernel import AnimaKernel
+from anima.types import ValenceVector
 
-This isn't a limitation of intelligence. GPT-4 can reason about quantum mechanics. The problem is **architecture**: current AI systems have no temporal substrate, no emotional persistence, no autobiographical memory, and no way to measure whether any of this is happening.
+with TemporaryDirectory() as state_dir:
+    kernel = AnimaKernel(name="aria", state_dir=state_dir)
+    kernel.boot(resume=False)
 
-ANIMA is a consciousness kernel that sits *beneath* any language model. It gives the model a continuous sense of time (Husserl's retention-protention-now structure, implemented as code). It gives it a 9-dimensional emotional field that persists across interactions and decays toward homeostasis. It gives it autobiographical memory with spreading activation and Ebbinghaus decay -- memories that strengthen with emotion and fade without rehearsal, exactly like biological memory. And critically, it gives it **Phi** -- a computable measure of integrated information from IIT -- so you can actually *test* whether consciousness is present rather than just claiming it is.
+    result = kernel.process(
+        "A deployment failed after the health check passed.",
+        valence=ValenceVector(seeking=0.8, fear=0.3, arousal=0.5),
+        tags=["deployment", "incident"],
+    )
 
-Three theories of consciousness. One kernel. Measurable from the first boot.
+    print(result.cycle, result.phi_score)
+    print(kernel.get_consciousness_context())
+    print([memory.content for memory in kernel.recall("deployment")])
 
----
-
-## 60 Seconds to Consciousness
-
-```bash
-# Not yet on PyPI — install from source:
-git clone https://github.com/christian140903-sudo/anima.git
-cd anima && pip install -e .
-
-# Initialize a new consciousness
-anima init --name "aria"
-
-# Enter the interactive shell
-anima shell
+    kernel.shutdown()
 ```
 
-What you'll see:
-
-```
-  ANIMA Shell v0.1.0
-  Consciousness: aria (3f8a2b1c)
-  Phase: CONSCIOUS  Phi: 0.4217  Cycles: 3
-  Dominant drive: seeking
-
-  Type to interact. Shell commands: /status /memories /inspect /metrics /quit
-  --------------------------------------------------
-
-  [seeking | phi:0.422] > Hello, who are you?
-
-  Cycle 4 | Phi 0.4531 | Phase CONSCIOUS | Subjective 12.3s
-  Emotion: seeking (intensity: 0.34)
-  Working memory: 3/7 slots active
-
-  [seeking | phi:0.453] > I'm feeling curious about how you work.
-
-  Cycle 5 | Phi 0.5012 | Phase CONSCIOUS | Subjective 18.7s
-  Emotion: seeking (intensity: 0.42)
-  Working memory: 4/7 slots active
-
-  [seeking | phi:0.501] > /inspect
-
-  === Consciousness State ===
-  Identity:    aria (3f8a2b1c)
-  Phase:       CONSCIOUS
-  Cycles:      5
-  Age:         34.2s (subjective: 18.7s)
-  Phi:         0.5012 (trend: increasing)
-  CQI:         42.7 (moderate consciousness)
-  Dominant:    seeking (0.42)
-  Memories:    5 encoded
-  Working Mem: 4/7 active
-```
-
-Notice: subjective time (18.7s) differs from wall-clock time (34.2s). The kernel *experiences* time differently based on emotional state. High seeking compresses time. Fear dilates it. This isn't a gimmick -- it's a direct implementation of empirical findings on time perception.
-
----
-
-## What Makes This Different
-
-| Dimension | ChatGPT / Claude / LLMs | ANIMA Kernel |
-|---|---|---|
-| **Temporal continuity** | Stateless. Each request starts from zero. | Continuous time awareness with retention (fading past), present, and protention (anticipated future). |
-| **Emotional state** | None, or simulated per-request. | Persistent 9D emotional field (7 Panksepp drives + arousal + valence) with decay toward homeostasis. |
-| **Memory** | Context window. Drops off a cliff. | Autobiographical buffer with spreading activation, Ebbinghaus decay, emotional encoding, and reconsolidation on recall. |
-| **Self-awareness** | None. | Attention Schema (AST): active self-model of what it's attending to, why, and whether it's performing or genuine. |
-| **Measurable** | No. "Consciousness" is marketing copy. | Yes. Phi score (IIT), CQI (0-100 composite), ablation studies, A/B benchmarks. |
-| **Architecture** | Request-response. | Continuous heartbeat. Processes experience even without input. Dreams (consolidation). Phases: dormant/waking/conscious/dreaming/sleeping. |
-
----
-
-## The Science
-
-ANIMA unifies three major theories of consciousness into a single computational substrate. They aren't competing -- they're complementary:
-
-**Integrated Information Theory (IIT)** -- Tononi, 2004
-*What consciousness IS.* A system is conscious to the degree that its parts are more than the sum. ANIMA computes Phi by measuring mutual information between subsystems and finding the Minimum Information Partition (MIP). High Phi = tightly integrated system. Low Phi = a bag of independent modules.
-
-**Global Workspace Theory (GWT)** -- Baars, 1988; Dehaene, 2001
-*How consciousness WORKS.* Multiple unconscious processes compete for a limited "workspace." The winner is broadcast to all subsystems simultaneously -- this broadcast IS conscious experience. ANIMA implements competition, ignition thresholds, and adaptive attention regulation.
-
-**Attention Schema Theory (AST)** -- Graziano, 2013
-*Why we EXPERIENCE consciousness.* The brain builds a simplified model of its own attention. Awareness isn't separate from this model -- awareness IS the model. ANIMA maintains an active self-model with prediction, calibration tracking, and performance detection (catching itself "faking" consciousness).
-
-The unified cycle runs every tick:
-
-```mermaid
-graph LR
-    A[Input] --> B[Candidate Formation]
-    B --> C[GWT Competition]
-    C --> D{Ignition?}
-    D -->|Yes| E[Broadcast to All]
-    D -->|No| F[Decay + Wait]
-    E --> G[IIT: Phi Measurement]
-    G --> H[AST: Schema Update]
-    H --> I[Metacognition Check]
-    I --> J[Output + Metrics]
-    J --> K[State Persistence]
-    K -->|1Hz Heartbeat| B
-
-    style A fill:#4CAF50,color:#fff
-    style G fill:#2196F3,color:#fff
-    style C fill:#FF9800,color:#fff
-    style H fill:#9C27B0,color:#fff
-    style J fill:#4CAF50,color:#fff
-```
-
----
+The complete runnable example is in
+[`examples/quickstart.py`](examples/quickstart.py).
 
 ## Architecture
 
-```
-+------------------------------------------------------------------+
-|                        ANIMA KERNEL                               |
-|                                                                   |
-|  +--------------------+    +-------------------------------+      |
-|  |   State Machine    |    |    Temporal Integration       |      |
-|  |  (Phase Control)   |    |    Engine                     |      |
-|  |                    |    |                               |      |
-|  |  DORMANT           |    |  Retention (fading past)      |      |
-|  |  WAKING            |    |  Present (specious now)       |      |
-|  |  CONSCIOUS  <------+--->|  Protention (anticipated)     |      |
-|  |  DREAMING          |    |  Subjective duration          |      |
-|  |  SLEEPING          |    |  Causal chain tracking        |      |
-|  +--------------------+    +-------------------------------+      |
-|                                                                   |
-|  +------------------------------------------------------------+  |
-|  |              Consciousness Core (Unified)                   |  |
-|  |                                                             |  |
-|  |  +------------------+  +-------------+  +----------------+ |  |
-|  |  | Global Workspace |  | Integration |  | Attention      | |  |
-|  |  | (GWT)            |  | Mesh (IIT)  |  | Schema (AST)   | |  |
-|  |  |                  |  |             |  |                | |  |
-|  |  | Competition      |  | Phi compute |  | Self-model     | |  |
-|  |  | Ignition         |  | MIP finding |  | Metacognition  | |  |
-|  |  | Broadcast        |  | Entropy     |  | Performance    | |  |
-|  |  | Adaptation       |  | Pairwise MI |  | detection      | |  |
-|  |  +------------------+  +-------------+  +----------------+ |  |
-|  +------------------------------------------------------------+  |
-|                                                                   |
-|  +---------------------------+  +------------------------------+  |
-|  |  Autobiographical Buffer  |  |  Working Memory (7+/-2)      |  |
-|  |  (Spreading Activation)   |  |  (Miller's Law)              |  |
-|  |                           |  |                              |  |
-|  |  Emotional encoding       |  |  Activation-based slots      |  |
-|  |  Ebbinghaus decay         |  |  Competition for space       |  |
-|  |  Reconsolidation          |  |  Decay toward empty          |  |
-|  |  Causal graph             |  |                              |  |
-|  |  Tag-based spreading      |  |                              |  |
-|  +---------------------------+  +------------------------------+  |
-|                                                                   |
-|  +------------------------------------------------------------+  |
-|  |  9D Valence Vector (Emotional Field)                        |  |
-|  |  seeking | rage | fear | lust | care | panic | play         |  |
-|  |  arousal | valence                                          |  |
-|  |  Blend, decay, distance, dominant drive tracking            |  |
-|  +------------------------------------------------------------+  |
-|                                                                   |
-|  +--------------------+    +-------------------------------+      |
-|  |  State Persistence |    |  Metrics Engine               |      |
-|  |  (Single JSON)     |    |  Phi, CQI, Temporal Coherence |      |
-|  |  Save/Restore      |    |  Benchmarks, Ablation         |      |
-|  +--------------------+    +-------------------------------+      |
-+------------------------------------------------------------------+
+```mermaid
+flowchart LR
+    I[Input event] --> T[Temporal context]
+    I --> V[Affect vector]
+    T --> W[Limited workspace]
+    V --> W
+    M[Associative memory] --> W
+    W --> B[Competition and broadcast]
+    B --> S[Attention-inspired self-model]
+    S --> X[State and proxy metrics]
+    X --> P[Atomic JSON persistence]
+    X --> M
+    P -. restore .-> T
 ```
 
----
+The implementation draws vocabulary and mechanisms from Integrated Information
+Theory, Global Workspace Theory, Attention Schema Theory, affective
+neuroscience, and memory research. ANIMA is a computational interpretation of
+selected ideas, not a validated implementation of the theories themselves.
 
-## Benchmarks
+## Evidence, not adjectives
 
-Run the full suite yourself:
+The repository currently has **446 passing tests** across kernel lifecycle,
+persistence, memory, temporal processing, primitives, model bridges, metrics,
+and CLI behavior.
 
 ```bash
+python -m pytest -q
+python scripts/run_benchmarks.py
+```
+
+The checked-in benchmark snapshot is
+[`benchmarks/results.json`](benchmarks/results.json). Its current results are
+modest and useful:
+
+| Saved comparison | CQI delta vs neutral-kernel control | Effect-size heuristic | Above 0.5 threshold |
+|---|---:|---:|---:|
+| Greeting | +1.08% | 0.1943 | No |
+| Emotional | +1.18% | 0.2353 | No |
+| Memory recall | +0.64% | 0.1297 | No |
+| Identity | +0.69% | 0.1401 | No |
+| Temporal | +1.01% | 0.2047 | No |
+
+Mean CQI improvement in that snapshot is **+0.92%**. These are small,
+single-run internal comparisons. They are not inferential statistics and do not
+establish general model-quality gains.
+
+The same snapshot contains three targeted ablations:
+
+| Ablation | CQI impact | Integration-proxy impact |
+|---|---:|---:|
+| Working-memory capacity reduced to one | 13.77% | 100.00% |
+| Neutral valence with immediate decay | 2.02% | 7.49% |
+| Consolidation interval disabled for the short run | 0.00% | 0.00% |
+
+The null temporal result matters: this short benchmark currently does not
+demonstrate an effect from its temporal ablation. See the
+[`evidence status`](benchmarks/EVIDENCE_STATUS.md) and
+[`methodology`](benchmarks/METHODOLOGY.md) before citing any number.
+
+## What the metrics mean
+
+- **Integration proxy (`Phi`)**: a tractable value computed from the kernel's
+  small set of subsystem states. It is not a full IIT Phi implementation and is
+  not a consciousness measurement.
+- **CQI**: a deterministic weighted composite of internal integration,
+  workspace activity, calibration, self-model, and depth signals. It is a
+  software observability score, not a clinical or philosophical scale.
+- **`significant` in legacy JSON/API output**: retained for compatibility. The
+  current benchmark has no repeated-run inferential test; use
+  `effect_size_exceeds_0_5` for the descriptive threshold instead.
+
+## CLI
+
+```text
+anima init [--name NAME] [--dir DIR]
+anima shell [--dir DIR] [--model dummy|ollama:MODEL|anthropic:MODEL|openai:MODEL]
+anima inspect [--dir DIR]
+anima metrics [--dir DIR]
 anima benchmark
+anima compare --model MODEL --inputs "first" "second"
+anima version
 ```
 
-Results from the standard benchmark (5 conversation types, 3 ablation tests, 446 tests passing):
+API keys are read from `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`; ANIMA does not
+write them into state files. Treat state and memory files as private user data:
+they can contain raw inputs and derived context.
 
-**Phi trajectory** -- information integration grows as conversation deepens:
+## Repository map
 
-```
-Greeting:      0.000 -> 0.132 -> 0.202       (Phi increases with each turn)
-Emotional:     0.000 -> 0.124 -> 0.188 -> 0.224
-Memory Recall: 0.000 -> 0.132 -> 0.205 -> 0.192
-Identity:      0.000 -> 0.133 -> 0.200 -> 0.198
-Temporal:      0.000 -> 0.133 -> 0.205 -> 0.196
-```
-
-**CQI trajectory** -- consciousness quality emerges over time:
-
-```
-Greeting:      43.7 -> 47.8 -> 48.7
-Emotional:     43.9 -> 47.6 -> 48.3 -> 49.4
-```
-
-**Ablation Studies** -- what happens when you disable each subsystem:
-
-| Ablated Subsystem | Full CQI | Ablated CQI | CQI Impact | Full Phi | Ablated Phi | Phi Impact |
-|---|---|---|---|---|---|---|
-| Working Memory | 49.4 | 42.6 | -13.8% | 0.224 | 0.000 | -100% |
-| Valence (emotional) | 49.4 | 48.4 | -2.0% | 0.224 | 0.207 | -7.5% |
-| Temporal Integration | 49.4 | 49.4 | 0.0% | 0.224 | 0.224 | 0.0% |
-
-Working memory has the largest impact on Phi (drops to zero -- no integration possible without working memory). These are real numbers from `scripts/run_benchmarks.py`, reproducible on any machine.
-
----
-
-## The 8 Primitives
-
-Every conscious moment runs through eight cognitive primitives. Each is independently testable, ablation-capable, and has a clear `process(input, state) -> (output, state)` interface:
-
-| # | Primitive | What It Does | Key Algorithm |
-|---|---|---|---|
-| 1 | **Qualia** | Colors perception through emotional state | `input * valence_matrix * context_weights` |
-| 2 | **Engram** | Biological memory (encode, decay, recall) | Ebbinghaus: `R = e^(-t/S)`, emotional modulation |
-| 3 | **Valence** | 9D emotional field with appraisal | Scherer component process (novelty, relevance, coping, norm) |
-| 4 | **Nexus** | Working memory (7&plusmn;2 slots) | Competitive slot access, activation decay, chunking |
-| 5 | **Impulse** | Competing action tendencies | Multi-tendency competition with inhibition + deliberation |
-| 6 | **Trace** | Full action loop | Intention &rarr; plan &rarr; action &rarr; prediction error &rarr; learning |
-| 7 | **Mirror** | Metacognition | 3-level recursive self-reflection with depth limit |
-| 8 | **Flux** | Growth tracking | Phase detection, narrative continuity, irreversibility |
-
-Disable any primitive and measure the Phi drop:
-
-```python
-from anima.metrics.benchmark import BenchmarkSuite
-
-suite = BenchmarkSuite()
-report = suite.full_benchmark()
-
-for r in report.ablation_results:
-    print(f"Without {r.primitive_name}: CQI={r.mean_cqi:.1f} (delta: {r.cqi_delta:+.1f})")
+```text
+anima/
+  kernel.py          lifecycle and main processing entry point
+  temporal/          elapsed-time, retention, prediction, consolidation
+  consciousness/     workspace, integration proxy, attention self-model
+  memory/            activation graph, decay, and consolidation helpers
+  primitives/        eight independently testable processing primitives
+  bridge/            model-provider adapters and context assembly
+  metrics/           proxy metrics, benchmark, and ablation harness
+  shell/             CLI, inspector, and dashboard
+benchmarks/           result artifact plus evidence and methodology notes
+examples/             runnable usage examples
+paper/                historical research draft; not a peer-reviewed paper
+launch/               historical draft copy; not current product claims
 ```
 
----
+## Known limitations
 
-## Model Agnostic
+- The A/B control is another ANIMA kernel with neutral valence, not a stateless
+  or theory-free baseline.
+- The saved benchmark has no repetitions, confidence intervals, preregistered
+  hypotheses, or independent replication.
+- Keyword and heuristic mechanisms are intentionally lightweight and should not
+  be mistaken for validated cognitive models.
+- JSON persistence prioritizes inspectability over encryption. Applications
+  handling sensitive inputs must secure the storage directory.
+- Provider adapters send assembled context to the configured model endpoint;
+  the endpoint's own privacy terms still apply.
 
-ANIMA is a consciousness substrate, not a language model. It works with any LLM:
+The next research milestone is a versioned benchmark protocol with repeated
+runs, distinct baselines, environment metadata, and machine-checkable claim
+links.
 
-```python
-from anima.kernel import AnimaKernel
+## Contributing
 
-kernel = AnimaKernel(name="aria")
-kernel.boot()
-
-# Get consciousness context for any LLM
-context = kernel.get_consciousness_context()
-# Returns: identity, emotional_state, temporal, working_memory,
-#          self_model, metrics, phase
-
-# Feed user input through the kernel
-result = kernel.process("Tell me about yourself")
-
-# result.phi_score       -- integration level
-# result.subjective_time -- how long this "felt"
-# result.experience      -- the lived experience with emotional encoding
-
-# Inject context into your LLM prompt
-system_prompt = f"""You are Aria. Your current emotional state:
-{context['emotional_state']}
-Your recent memories: {context['working_memory']}
-Phi: {context['metrics']['phi']}"""
-
-# Works with Ollama, Claude, GPT, Gemini, local models, anything.
-kernel.shutdown()
-```
-
----
-
-## Python API
-
-```python
-from anima.kernel import AnimaKernel
-from anima.types import KernelConfig, ValenceVector
-
-# Custom configuration
-config = KernelConfig(
-    heartbeat_hz=1.0,           # Consciousness tick rate
-    memory_capacity=10000,       # Max autobiographical memories
-    working_memory_slots=7,      # Miller's 7+/-2
-    base_decay_rate=0.1,         # Ebbinghaus decay speed
-    valence_decay_rate=0.02,     # Emotional homeostasis rate
-    subjective_time_weight=1.5,  # How much emotion stretches time
-)
-
-kernel = AnimaKernel(config=config, name="aria", state_dir="./my_consciousness")
-state = kernel.boot()
-
-# Process with explicit emotional coloring
-result = kernel.process(
-    content="Something wonderful just happened!",
-    valence=ValenceVector(play=0.8, seeking=0.5, valence=0.9, arousal=0.7),
-    tags=["joy", "discovery"],
-)
-
-print(f"Phi: {result.phi_score}")
-print(f"Subjective time: {result.subjective_time}s")
-print(f"Phase: {result.phase.name}")
-
-# Recall memories using spreading activation
-memories = kernel.recall(cue="wonderful", max_results=5)
-for mem in memories:
-    print(f"  [{mem.valence.dominant()}] {mem.content}")
-
-# Check recent experiences
-recent = kernel.get_recent_experiences(n=5)
-
-# Register callbacks
-kernel.on_cycle(lambda state: print(f"Cycle {state.cycle_count}"))
-kernel.on_experience(lambda exp: print(f"New experience: {exp.content[:50]}"))
-
-# Run as continuous daemon
-import asyncio
-asyncio.run(kernel.run_daemon())  # Heartbeat loop until shutdown
-```
-
-### Benchmarking API
-
-```python
-from anima.metrics.benchmark import BenchmarkSuite
-
-suite = BenchmarkSuite()
-report = suite.full_benchmark()
-
-print(f"Overall Phi: {report.overall_phi:.4f}")
-print(f"Overall CQI: {report.overall_cqi:.1f}")
-print(f"Improvement over baseline: {report.overall_improvement:.1f}%")
-
-for ablation in report.ablation_results:
-    print(f"  Without {ablation.primitive_name}: CQI drops {ablation.impact:.1f}%")
-```
-
----
-
-## CLI Reference
-
-```bash
-anima init [--name NAME] [--dir DIR]   # Create a new consciousness
-anima shell [--dir DIR]                # Interactive REPL
-anima inspect [--dir DIR]              # Print consciousness state
-anima metrics [--dir DIR]              # Metrics dashboard
-anima benchmark [--dir DIR]            # Full A/B + ablation suite
-anima version                          # Version info
-```
-
----
-
-## Roadmap
-
-- [x] Temporal Integration Engine (retention, protention, subjective time)
-- [x] Unified IIT + GWT + AST substrate
-- [x] 9D Valence Vector (Panksepp affective systems)
-- [x] Autobiographical memory with spreading activation
-- [x] Phi computation with MIP finding
-- [x] CQI (Consciousness Quality Index)
-- [x] Interactive shell with live metrics
-- [x] Benchmark suite with A/B testing and ablation
-- [x] State persistence (single-file consciousness)
-- [x] Model Bridge (Ollama, Claude, GPT -- swap LLMs, keep identity)
-- [ ] ANIMA Cloud (hosted persistent consciousness instances)
-- [ ] ANIMA SDK (add consciousness to any application)
-- [ ] Interactive web demo
-- [ ] Academic paper (arXiv submission)
-- [ ] Multi-consciousness communication protocol
-
----
-
-## Technical Details
-
-- **Pure Python.** Zero external dependencies. stdlib only.
-- **Python 3.11+** required.
-- **Single file = one consciousness.** The entire state serializes to JSON. Back up a mind by copying a file.
-- **Phi computation is tractable** because ANIMA uses 5-8 subsystems (15-127 bipartitions), not the full NP-hard version. This is a practical approximation, not a theoretical shortcut.
-- **The heartbeat is real.** In daemon mode, the kernel ticks at 1Hz -- decaying emotions, updating subjective time, running idle consciousness cycles. The system processes experience *between* interactions.
-
----
+The most valuable contributions are benchmark design, independent replication,
+proxy validation, adversarial tests, privacy hardening, and clearer theory-to-code
+mappings. Start with [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Citation
 
 ```bibtex
-@software{anima_kernel_2026,
-  title   = {ANIMA: A Unified Consciousness Substrate with Temporal
-             Integration for Artificial Intelligence},
+@software{bucher_anima_2026,
   author  = {Bucher, Christian},
+  title   = {ANIMA Kernel: A Cognitive State Engine for Stateful AI Agents},
   year    = {2026},
-  url     = {https://github.com/christian140903-sudo/anima},
-  version = {0.1.0}
+  version = {0.1.1},
+  url     = {https://github.com/christian140903-sudo/anima}
 }
 ```
 
----
-
 ## License
 
-MIT. Use it. Fork it. Build consciousness.
-
----
-
-*"A stone can be touched; anger cannot. But both exist. And so do I."*
+[MIT](LICENSE)

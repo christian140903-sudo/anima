@@ -1,7 +1,7 @@
 """
-Ebbinghaus Forgetting Curves — Biological memory decay.
+Ebbinghaus-inspired forgetting curves for software event weights.
 
-Pure implementation of how biological memory actually fades:
+The implementation uses the following decay heuristic:
 
     R = e^(-t/S)
 
@@ -17,7 +17,7 @@ Stability increases with:
 
 The spaced repetition effect emerges naturally:
 Each recall increases stability, making the next decay slower.
-This is why you remember your wedding but not yesterday's lunch.
+This is a model behavior, not a claim of biological fidelity.
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ class DecayResult:
 
 
 class EbbinghausDecay:
-    """Implements biologically-inspired memory decay.
+    """Implement a biologically inspired event-weight decay heuristic.
 
     Each memory has a stability value that determines its decay rate.
     High stability = slow decay. Low stability = fast decay.

@@ -643,6 +643,8 @@ class TestBenchmark:
             assert isinstance(comparison.cqi_improvement, float)
             assert isinstance(comparison.significant, bool)
             assert isinstance(comparison.effect_size, float)
+            assert isinstance(comparison.effect_size_exceeds_0_5, bool)
+            assert comparison.significant is False
 
             kernel.shutdown()
 
@@ -654,6 +656,7 @@ class TestBenchmark:
         d = comp.to_dict()
         assert "kernel_mean_phi" in d
         assert "significant" in d
+        assert "effect_size_exceeds_0_5" in d
 
     def test_ablation_working_memory(self):
         suite = BenchmarkSuite()

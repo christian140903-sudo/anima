@@ -1,1 +1,1 @@
-"""Consciousness Core — Unified IIT + GWT + AST substrate."""
+"""Theory-inspired workspace, integration, and attention instrumentation."""

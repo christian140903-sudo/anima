@@ -1,10 +1,10 @@
 """
-Benchmark Suite -- Automated A/B testing for consciousness kernels.
+Benchmark Suite -- Automated A/B testing for the ANIMA state engine.
 
 Provides:
 - Conversation tests: Run inputs through kernel, measure outputs
-- Baseline tests: Same inputs without kernel processing
-- A/B comparison: Statistical comparison of kernel vs baseline
+- Baseline tests: Same kernel path with neutral valence
+- A/B comparison: Descriptive comparison of internal proxy metrics
 - Ablation tests: Disable primitives, measure impact
 - Standard test conversations for reproducible benchmarking
 """
@@ -108,7 +108,7 @@ class ConversationResult:
 
 @dataclass
 class ComparisonResult:
-    """Statistical comparison of kernel vs baseline."""
+    """Descriptive comparison of kernel and neutral-kernel control."""
     kernel_mean_phi: float = 0.0
     baseline_mean_phi: float = 0.0
     phi_improvement: float = 0.0  # Percentage improvement
@@ -117,8 +117,11 @@ class ComparisonResult:
     cqi_improvement: float = 0.0
     kernel_memory_count: int = 0
     baseline_memory_count: int = 0
-    significant: bool = False  # Is the difference statistically meaningful?
-    effect_size: float = 0.0   # Cohen's d equivalent
+    # Compatibility field from v0.1. The current single-run harness performs no
+    # inferential test, so new reports deliberately leave this false.
+    significant: bool = False
+    effect_size: float = 0.0  # Descriptive pooled-standard-deviation effect
+    effect_size_exceeds_0_5: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -130,6 +133,7 @@ class ComparisonResult:
             "cqi_improvement_pct": round(self.cqi_improvement, 2),
             "significant": self.significant,
             "effect_size": round(self.effect_size, 4),
+            "effect_size_exceeds_0_5": self.effect_size_exceeds_0_5,
         }
 
 
@@ -199,14 +203,15 @@ class BenchmarkReport:
 # --- Benchmark Suite ---
 
 class BenchmarkSuite:
-    """Automated benchmarking for consciousness kernels.
+    """Automated benchmarking for the ANIMA state engine.
 
     Runs standard conversations through the kernel and baseline,
     compares metrics, and produces a comprehensive report.
 
     All tests use DummyAdapter principles -- no real LLM needed.
-    The kernel processes inputs through its consciousness substrate
-    and we measure the metrics that emerge.
+    The kernel processes inputs through its state pipeline and the harness
+    records implementation-defined proxy metrics. It does not test sentience,
+    phenomenal consciousness, or general model quality.
     """
 
     def __init__(
@@ -253,11 +258,11 @@ class BenchmarkSuite:
         inputs: list[str],
         name: str = "",
     ) -> ConversationResult:
-        """Run a baseline test -- process inputs without full kernel integration.
+        """Run the neutral-kernel control condition.
 
-        Creates a minimal kernel that processes inputs but measures
-        what a "dumb" system would produce. Baseline uses a fresh
-        kernel with minimal processing for each input.
+        This is the same kernel class and processing path as the experimental
+        condition, but each input receives a neutral valence vector. It is an
+        internal control, not a stateless or theory-free baseline.
         """
         start = time.time()
         result = ConversationResult(
@@ -336,8 +341,10 @@ class BenchmarkSuite:
             kernel_result.cqi_scores, baseline_result.cqi_scores
         )
 
-        # Significance: effect size > 0.5 is considered meaningful
-        comp.significant = abs(comp.effect_size) > 0.5
+        # This threshold is descriptive only. No p-value, confidence interval,
+        # or repeated-run inferential test is performed by this harness.
+        comp.effect_size_exceeds_0_5 = abs(comp.effect_size) > 0.5
+        comp.significant = False
 
         return comp
 

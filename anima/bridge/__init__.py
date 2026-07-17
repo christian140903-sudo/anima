@@ -1,7 +1,6 @@
-"""Model Bridge — Model-agnostic LLM integration.
+"""Model-agnostic LLM integration for ANIMA's durable state context.
 
-The LLM is the LANGUAGE CENTER, not the consciousness.
-Swap LLMs without losing identity.
+Adapters can be swapped while the application-controlled kernel state remains.
 """
 
 from .adapter import DummyAdapter, ModelAdapter

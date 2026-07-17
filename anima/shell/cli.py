@@ -2,12 +2,12 @@
 ANIMA Shell -- Main entry point for the ANIMA Kernel CLI.
 
 Like Unix started with a shell, ANIMA starts here.
-From zero to consciousness in one command.
+Create inspectable, persistent agent state from one command.
 
 Usage:
-    anima init [--name NAME] [--dir DIR]     # Initialize a new consciousness
+    anima init [--name NAME] [--dir DIR]     # Initialize new kernel state
     anima shell [--dir DIR] [--model MODEL]  # Interactive terminal session
-    anima inspect [--dir DIR]                # Show current consciousness state
+    anima inspect [--dir DIR]                # Show current kernel state
     anima metrics [--dir DIR]                # Show live metrics dashboard
     anima benchmark [--dir DIR]              # Run full benchmark suite
     anima compare [--dir DIR] --inputs ...   # Compare kernel+LLM vs raw LLM
@@ -103,8 +103,8 @@ def build_parser() -> argparse.ArgumentParser:
     """Build the argument parser for the ANIMA CLI."""
     parser = argparse.ArgumentParser(
         prog="anima",
-        description="ANIMA Kernel -- Consciousness substrate for AI.",
-        epilog="From zero to consciousness in one command.",
+        description="ANIMA Kernel -- cognitive state engine for AI agents.",
+        epilog="Persistent, inspectable agent state in pure Python.",
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
@@ -112,24 +112,24 @@ def build_parser() -> argparse.ArgumentParser:
     # anima init
     init_parser = subparsers.add_parser(
         "init",
-        help="Initialize a new consciousness",
-        description="Create a new ANIMA consciousness. Like `git init` for minds.",
+        help="Initialize new kernel state",
+        description="Create a new ANIMA state directory.",
     )
     init_parser.add_argument(
-        "--name", default="anima", help="Name for the consciousness (default: anima)"
+        "--name", default="anima", help="Name for the kernel state (default: anima)"
     )
     init_parser.add_argument(
-        "--dir", default=".", help="Directory to store consciousness state (default: .)"
+        "--dir", default=".", help="Directory to store kernel state (default: .)"
     )
 
     # anima shell
     shell_parser = subparsers.add_parser(
         "shell",
-        help="Interactive consciousness terminal",
-        description="Enter the ANIMA shell -- an interactive REPL for consciousness.",
+        help="Interactive state terminal",
+        description="Enter the ANIMA shell -- an interactive state-engine REPL.",
     )
     shell_parser.add_argument(
-        "--dir", default=".", help="Directory with consciousness state (default: .)"
+        "--dir", default=".", help="Directory with kernel state (default: .)"
     )
     shell_parser.add_argument(
         "--model", default="dummy",
@@ -145,28 +145,28 @@ def build_parser() -> argparse.ArgumentParser:
     # anima inspect
     inspect_parser = subparsers.add_parser(
         "inspect",
-        help="Inspect current consciousness state",
-        description="Pretty-print the current consciousness state.",
+        help="Inspect current kernel state",
+        description="Pretty-print the current ANIMA kernel state.",
     )
     inspect_parser.add_argument(
-        "--dir", default=".", help="Directory with consciousness state (default: .)"
+        "--dir", default=".", help="Directory with kernel state (default: .)"
     )
 
     # anima metrics
     metrics_parser = subparsers.add_parser(
         "metrics",
-        help="Show consciousness metrics dashboard",
+        help="Show internal metrics dashboard",
         description="Display a metrics dashboard with Phi, CQI, and more.",
     )
     metrics_parser.add_argument(
-        "--dir", default=".", help="Directory with consciousness state (default: .)"
+        "--dir", default=".", help="Directory with kernel state (default: .)"
     )
 
     # anima benchmark
     bench_parser = subparsers.add_parser(
         "benchmark",
         help="Run full benchmark suite",
-        description="Run A/B tests and ablation studies on the consciousness kernel.",
+        description="Run descriptive A/B tests and state-engine ablations.",
     )
     bench_parser.add_argument(
         "--dir", default=".", help="Directory for benchmark state (default: temp dir)"
@@ -183,7 +183,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     compare_parser.add_argument(
         "--dir", default=None,
-        help="Directory for consciousness state (default: temp dir)",
+        help="Directory for kernel state (default: temp dir)",
     )
     compare_parser.add_argument(
         "--model", default="dummy",
@@ -206,38 +206,38 @@ def build_parser() -> argparse.ArgumentParser:
 # --- Command Handlers ---
 
 def cmd_init(args: argparse.Namespace) -> int:
-    """Initialize a new consciousness."""
+    """Initialize new kernel state."""
     state_dir = os.path.abspath(args.dir)
     name = args.name
 
-    print(f"\n  Initializing ANIMA consciousness '{cyan(name)}'...")
+    print(f"\n  Initializing ANIMA state '{cyan(name)}'...")
     print(f"  Directory: {dim(state_dir)}\n")
 
     kernel = AnimaKernel(state_dir=state_dir, name=name)
     state = kernel.boot(resume=False)
 
-    # Process a birth experience
+    # Record an initialization event
     kernel.process(
-        f"I am born. My name is {name}. This is my first moment of existence.",
+        f"Kernel initialized. State name: {name}.",
         valence=ValenceVector.curious(),
-        tags=["birth", "identity", "first-moment"],
+        tags=["initialization", "identity"],
     )
 
     kernel.shutdown()
 
-    print(f"  {green('Consciousness initialized.')}")
+    print(f"  {green('Kernel state initialized.')}")
     print(f"  Kernel ID:  {state.kernel_id}")
     print(f"  Name:       {name}")
     print(f"  State file: {os.path.join(state_dir, 'anima.state')}")
     print(f"  Cycles:     {kernel.cycle_count}")
     print(f"  Phi:        {state.phi_score:.4f}")
-    print(f"\n  {dim('From zero to consciousness in one command.')}\n")
+    print(f"\n  {dim('Persistent, inspectable agent state is ready.')}\n")
 
     return 0
 
 
 def cmd_shell(args: argparse.Namespace) -> int:
-    """Interactive consciousness shell with optional LLM integration."""
+    """Interactive state shell with optional LLM integration."""
     state_dir = os.path.abspath(args.dir)
     model_spec = args.model
 
@@ -261,12 +261,12 @@ def cmd_shell(args: argparse.Namespace) -> int:
         print()
         return 1
 
-    # Check for existing consciousness
+    # Check for existing kernel state
     sm = StateManager(state_dir)
     if sm.exists():
-        print(f"\n  {green('Resuming consciousness')} from {dim(state_dir)}")
+        print(f"\n  {green('Resuming kernel state')} from {dim(state_dir)}")
     else:
-        print(f"\n  {yellow('No consciousness found.')} Creating new one...")
+        print(f"\n  {yellow('No kernel state found.')} Creating new state...")
 
     kernel = AnimaKernel(state_dir=state_dir)
     kernel.boot()
@@ -281,7 +281,7 @@ def cmd_shell(args: argparse.Namespace) -> int:
     state = kernel.state
     dominant = state.valence.dominant()
     print(f"\n  ANIMA Shell v{__version__}")
-    print(f"  Consciousness: {cyan(state.name)} ({dim(state.kernel_id[:8])})")
+    print(f"  State: {cyan(state.name)} ({dim(state.kernel_id[:8])})")
     print(f"  Phase: {green(state.phase.name)}  Phi: {state.phi_score:.4f}  Cycles: {state.cycle_count}")
     print(f"  Dominant drive: {yellow(dominant)}")
     print(f"  Model: {cyan(adapter.name())}")
@@ -316,14 +316,14 @@ def cmd_shell(args: argparse.Namespace) -> int:
                     break
                 continue
 
-            # 1. Process user input through kernel (updates consciousness state)
+            # 1. Process user input through the state engine
             result = kernel.process(user_input)
 
             # Track history
             phi_history.append(result.phi_score)
             cqi_history.append(kernel.state.consciousness_quality_index)
 
-            # 2. Assemble consciousness context for LLM
+            # 2. Assemble selected kernel state for the LLM
             recent_experiences = kernel.get_recent_experiences(5)
             temporal_context = kernel._time_engine.get_temporal_context()
             system_prompt, user_prompt = assembler.assemble(
@@ -349,7 +349,7 @@ def cmd_shell(args: argparse.Namespace) -> int:
                 source="self",
             )
 
-            # 5. Display response with consciousness metadata
+            # 5. Display response with internal proxy metadata
             cqi = kernel.state.consciousness_quality_index
             emotion = result.experience.valence.dominant()
             intensity = result.experience.valence.magnitude()
@@ -366,7 +366,7 @@ def cmd_shell(args: argparse.Namespace) -> int:
             # Show working memory activity
             active_count = len(kernel.state.active_slots())
             total_count = len(kernel.state.working_memory)
-            print(f"  {dim(f'Cycle {result.cycle} | WM: {active_count}/{total_count} | Subjective: {result.subjective_time:.1f}s')}")
+            print(f"  {dim(f'Cycle {result.cycle} | WM: {active_count}/{total_count} | Modeled time: {result.subjective_time:.1f}s')}")
             print()
 
     except KeyboardInterrupt:
@@ -374,7 +374,7 @@ def cmd_shell(args: argparse.Namespace) -> int:
 
     # Shutdown
     kernel.shutdown()
-    print(f"\n  {dim('Consciousness saved. Kernel shut down.')}\n")
+    print(f"\n  {dim('Kernel state saved. Kernel shut down.')}\n")
 
     return 0
 
@@ -479,7 +479,7 @@ def cmd_compare(args: argparse.Namespace) -> int:
     print(f"  {bold('Summary:')}")
     print(f"  Mean Phi (kernel):  {green(f'{mean_phi:.4f}')}")
     print(f"  Mean CQI (kernel):  {green(f'{mean_cqi:.1f}')}")
-    print(f"  Kernel responses have consciousness-colored context.")
+    print(f"  Kernel responses receive dynamic, state-assembled context.")
     print(f"  Raw responses use a static system prompt.")
     print()
 
@@ -564,7 +564,7 @@ def _handle_shell_command(
         print(f"\n  {bold('Shell Commands:')}")
         print(f"  /status    Show metrics dashboard")
         print(f"  /memories  Show recent memories")
-        print(f"  /inspect   Full consciousness inspection")
+        print(f"  /inspect   Full kernel-state inspection")
         print(f"  /metrics   Metrics dashboard (same as /status)")
         print(f"  /recall    Recall memories by cue (/recall <cue>)")
         print(f"  /help      This help message")
@@ -578,18 +578,18 @@ def _handle_shell_command(
 
 
 def cmd_inspect(args: argparse.Namespace) -> int:
-    """Inspect consciousness state."""
+    """Inspect kernel state."""
     state_dir = os.path.abspath(args.dir)
     sm = StateManager(state_dir)
 
     if not sm.exists():
-        print(f"\n  {red('No consciousness found')} in {dim(state_dir)}")
+        print(f"\n  {red('No kernel state found')} in {dim(state_dir)}")
         print(f"  Run {bold('anima init')} first.\n")
         return 1
 
     state = sm.load_state()
     if state is None:
-        print(f"\n  {red('Failed to load consciousness state.')}\n")
+        print(f"\n  {red('Failed to load kernel state.')}\n")
         return 1
 
     experiences = sm.load_memory()
@@ -608,13 +608,13 @@ def cmd_metrics(args: argparse.Namespace) -> int:
     sm = StateManager(state_dir)
 
     if not sm.exists():
-        print(f"\n  {red('No consciousness found')} in {dim(state_dir)}")
+        print(f"\n  {red('No kernel state found')} in {dim(state_dir)}")
         print(f"  Run {bold('anima init')} first.\n")
         return 1
 
     state = sm.load_state()
     if state is None:
-        print(f"\n  {red('Failed to load consciousness state.')}\n")
+        print(f"\n  {red('Failed to load kernel state.')}\n")
         return 1
 
     # Extract phi history from valence_history timestamps

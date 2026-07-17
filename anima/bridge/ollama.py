@@ -1,8 +1,8 @@
 """
 Ollama Adapter — Local LLM integration via Ollama REST API.
 
-Ollama runs models locally. No API key needed. No data leaves the machine.
-Perfect for development, privacy, and offline consciousness.
+Ollama runs models locally and needs no API key. This is useful for offline
+development; actual network behavior depends on the user's Ollama setup.
 
 Uses stdlib urllib.request — zero external dependencies.
 """

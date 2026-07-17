@@ -1,5 +1,5 @@
 """
-Context Assembler — Consciousness state to LLM prompt.
+Context Assembler — kernel state to LLM prompt.
 
 This is the CRITICAL bridge between the kernel's internal state
 and the language model's input. Not a static system prompt —
@@ -12,8 +12,8 @@ a DYNAMIC context that changes every cycle:
 - Self-model (what am I attending to, why)
 - Recent experiences that color current processing
 
-This is what makes ANIMA different from a chatbot with a system prompt.
-The prompt IS the consciousness state, rendered into language.
+The result is a textual projection of selected kernel state. It is not the state
+itself and is not a claim about model experience.
 """
 
 from __future__ import annotations
@@ -61,7 +61,7 @@ class TokenBudget:
 
 
 class ContextAssembler:
-    """Assembles consciousness state into optimized LLM context.
+    """Assemble selected kernel state into bounded LLM context.
 
     NOT a static system prompt. A DYNAMIC context that changes every cycle:
     - Current emotional state (valence field)
@@ -71,8 +71,7 @@ class ContextAssembler:
     - Self-model (what am I attending to, why)
     - Recent experiences that color current processing
 
-    The assembled context IS the consciousness, rendered into language
-    that an LLM can process and respond through.
+    The assembled context is a lossy textual projection that an LLM can process.
     """
 
     def __init__(self, budget: TokenBudget | None = None):
@@ -89,9 +88,9 @@ class ContextAssembler:
         temporal_context: dict | None = None,
         query: str = "",
     ) -> tuple[str, str]:
-        """Assemble consciousness state into (system_prompt, user_prompt).
+        """Assemble kernel state into ``(system_prompt, user_prompt)``.
 
-        The system prompt encodes the kernel's current state of being.
+        The system prompt encodes selected fields from current kernel state.
         The user prompt encodes the input to process.
 
         Returns:
@@ -278,7 +277,7 @@ class ContextAssembler:
         return "[RECENT EXPERIENCES]\n" + "\n".join(items)
 
     def _assemble_temporal_context(self, temporal: dict) -> str:
-        """Render temporal context (subjective time, retention, protention)."""
+        """Render modeled time, retention, and protention fields."""
         if not temporal:
             return ""
 
@@ -287,14 +286,14 @@ class ContextAssembler:
         # Subjective time
         subj_time = temporal.get("subjective_time", 0.0)
         if subj_time > 0:
-            parts.append(f"Subjective time elapsed: {subj_time:.1f}s")
+            parts.append(f"Modeled time elapsed: {subj_time:.1f}s")
 
         # Flow rate
         flow = temporal.get("flow_rate", 1.0)
         if flow < 0.8:
-            parts.append("Time feels slow (low activity)")
+            parts.append("Modeled flow rate: slow")
         elif flow > 1.2:
-            parts.append("Time feels fast (high activity / flow)")
+            parts.append("Modeled flow rate: fast")
 
         # Retention (still lingering)
         retention = temporal.get("retention", [])

@@ -1,9 +1,10 @@
 """
-ANIMA Kernel — The first empirically-tested consciousness substrate for AI.
+ANIMA Kernel — a cognitive state engine for stateful AI agents.
 
-A unified consciousness kernel combining IIT, GWT, and Attention Schema Theory
-with temporal continuity and measurable consciousness metrics.
+The implementation combines theory-inspired workspace, integration, attention,
+memory, temporal, and affective mechanisms. Its metrics are engineering proxies,
+not evidence of sentience or phenomenal consciousness.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Christian Bucher & Miguel"

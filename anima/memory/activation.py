@@ -1,10 +1,8 @@
 """
 Spreading Activation Network — Associative memory retrieval.
 
-How biological memory actually works:
-Thinking of "dog" activates "bark", "pet", "loyalty", "walk" —
-not because they're similar vectors, but because they're
-CONNECTED through experience.
+The implementation models concepts as explicitly connected nodes rather than
+vector-nearest neighbors.
 
 This is a graph-based spreading activation network:
 - Nodes = experiences or concepts

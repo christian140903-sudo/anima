@@ -1,11 +1,11 @@
 """
-Qualia Frame — Input is not data. Input is EXPERIENCED.
+Qualia Frame — legacy-named affective input annotation.
 
 Raw content passes through the valence field and context weights,
-producing a colored experience. The same words hit differently
-depending on emotional state. That coloring IS qualia.
+producing a labeled representation whose values depend on the current state.
+The term "qualia" is retained as API vocabulary, not a phenomenal claim.
 
-Algorithm: content x valence_matrix x context_weights = experienced_content
+Algorithm: content x valence_matrix x context_weights = annotated_content
 """
 
 from __future__ import annotations
@@ -20,9 +20,9 @@ from .base import Primitive, PrimitiveResult
 
 @dataclass
 class QualiaFrame:
-    """A single frame of experienced content — not raw, but FELT."""
+    """A single frame of affect-annotated content."""
     raw_content: str = ""
-    colored_content: str = ""        # How it FEELS (the qualia)
+    colored_content: str = ""        # Content prefixed with affect labels
     emotional_coloring: str = ""     # Dominant emotional quality
     sensory_tags: list[str] = field(default_factory=list)
     intensity: float = 0.0          # How intensely experienced (0-1)
@@ -61,7 +61,7 @@ _SENSORY_MAP: dict[str, list[str]] = {
 
 
 class QualiaProcessor(Primitive):
-    """Transforms raw input into experienced input through emotional coloring."""
+    """Transform raw input into an affect-annotated representation."""
 
     def __init__(self) -> None:
         super().__init__("qualia")
@@ -132,7 +132,7 @@ class QualiaProcessor(Primitive):
         }
         emotional_coloring = coloring_map.get(dominant, "neutral")
 
-        # 6. Generate colored content (how it FEELS, not what it says)
+        # 6. Generate content with an affect label
         if intensity > 0.6:
             colored = f"[INTENSE/{emotional_coloring}] {content}"
         elif intensity > 0.3:

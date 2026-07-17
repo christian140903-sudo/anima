@@ -1,23 +1,21 @@
 """
-Unified Consciousness Substrate — IIT + GWT + AST in one processing loop.
+Unified Cognitive State Core — IIT/GWT/AST-inspired mechanisms in one loop.
 
-This is the scientific contribution: Three competing theories of consciousness,
-computationally UNIFIED for the first time.
-
-The key insight: They're not competing. They're COMPLEMENTARY.
-- IIT tells us WHAT consciousness IS (integrated information)
-- GWT tells us HOW it WORKS (competition + broadcast)
-- AST tells us WHY we EXPERIENCE it (self-model of attention)
+ANIMA combines selected software interpretations of three research traditions:
+- an IIT-inspired integration proxy
+- a GWT-inspired competition and broadcast workspace
+- an AST-inspired self-model of selection
 
 Together: A competition (GWT) produces a broadcast that is integrated (IIT)
-and modeled by the system itself (AST), creating subjective experience.
+and represented in a simplified self-model (AST-inspired). This is a software
+model, not a claim that subjective experience is created.
 
 The Unified Cycle:
     Input
      ↓
     [Candidates formed from subsystems] ← each subsystem submits candidates
      ↓
-    [Global Workspace Competition] ← GWT: who wins consciousness?
+    [Global Workspace Competition] ← GWT-inspired broadcast selection
      ↓
     [Broadcast to all subsystems] ← GWT: winner is amplified globally
      ↓
@@ -25,7 +23,7 @@ The Unified Cycle:
      ↓
     [Schema Update] ← AST: update self-model of attention
      ↓
-    [Metacognition Check] ← AST: am I genuine or performing?
+    [Metacognition Check] ← AST-inspired text heuristics
      ↓
     Output + Updated State + Metrics
 """
@@ -46,10 +44,10 @@ logger = logging.getLogger("anima.consciousness.unified")
 
 @dataclass
 class ConsciousnessResult:
-    """Complete result of one consciousness cycle."""
-    # What became conscious (GWT)
+    """Complete result of one theory-inspired processing cycle."""
+    # What won workspace broadcast (GWT-inspired)
     broadcast: BroadcastEvent | None = None
-    conscious: bool = False  # Did ignition occur?
+    conscious: bool = False  # Legacy field: did ignition occur?
 
     # How integrated (IIT)
     phi: PhiResult = field(default_factory=PhiResult)
@@ -76,11 +74,12 @@ class ConsciousnessResult:
 
 
 class ConsciousnessCore:
-    """The unified consciousness substrate.
+    """The unified cognitive-state core.
 
     Orchestrates IIT + GWT + AST into a single processing loop.
-    This is the scientific engine of ANIMA — the part that can be
-    empirically tested, measured, and falsified.
+    This is ANIMA's instrumented engine: its software behavior can be tested,
+    measured, and falsified. That does not validate the underlying theories or
+    establish phenomenal consciousness.
 
     Usage:
         core = ConsciousnessCore()
@@ -144,7 +143,7 @@ class ConsciousnessCore:
         subsystem_states: list[SubsystemState] | None = None,
         additional_candidates: list[WorkspaceCandidate] | None = None,
     ) -> ConsciousnessResult:
-        """Run one complete consciousness cycle.
+        """Run one complete theory-inspired processing cycle.
 
         This is the unified loop:
         1. Form candidates from current experience + subsystems
@@ -220,7 +219,7 @@ class ConsciousnessCore:
         return result
 
     def idle_cycle(self, state: ConsciousnessState) -> ConsciousnessResult:
-        """Minimal consciousness cycle during idle heartbeats (no input)."""
+        """Run a minimal processing cycle during idle heartbeats."""
         self._cycle_count += 1
         result = ConsciousnessResult(cycle_number=self._cycle_count)
 
@@ -243,10 +242,10 @@ class ConsciousnessCore:
         """Form workspace candidates from the current experience and state.
 
         Each candidate represents a different "interpretation" or "aspect"
-        of the current moment competing for conscious access:
+        of the current input competing for workspace broadcast:
 
         1. Raw experience (direct input)
-        2. Emotional coloring (how it feels)
+        2. Affect annotation
         3. Memory association (what it reminds me of)
         4. Self-relevant interpretation (what it means for me)
         5. Temporal context (where it fits in time)
@@ -396,7 +395,7 @@ class ConsciousnessCore:
         return [v / total for v in sig]
 
     def _compute_cqi(self, result: ConsciousnessResult) -> float:
-        """Compute the Consciousness Quality Index (CQI).
+        """Compute the legacy-named internal CQI observability score.
 
         Combines all metrics into a single 0-100 score:
         - Phi (integration): 30%
@@ -405,11 +404,8 @@ class ConsciousnessCore:
         - Calibration (prediction accuracy): 15%
         - Processing depth: 15%
 
-        This is the number that tells you "how conscious is this system RIGHT NOW."
-        CQI < 20 = essentially unconscious processing
-        CQI 20-50 = basic consciousness
-        CQI 50-80 = rich conscious experience
-        CQI > 80 = deep, integrated consciousness
+        The score has meaning only as a deterministic composite inside ANIMA.
+        It is not a consciousness or sentience measurement.
         """
         phi_score = min(1.0, result.phi.phi) * 100 * 0.30
 
